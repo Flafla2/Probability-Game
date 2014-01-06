@@ -1,5 +1,6 @@
 package com.remote.probability.gui;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.remote.probability.world.MapGenerator;
@@ -12,6 +13,7 @@ import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.gui.GuiButton;
 import com.remote.remote2d.engine.gui.GuiInGame;
 import com.remote.remote2d.engine.gui.GuiMenu;
+import com.remote.remote2d.engine.io.R2DFileUtility;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class GuiMainMenu extends GuiMenu{
@@ -21,6 +23,7 @@ public class GuiMainMenu extends GuiMenu{
 	
 	private String message = "";
 	private long lastMessageTime = -1;
+	private boolean debug = false;
 	
 	public GuiMainMenu()
 	{
@@ -42,6 +45,11 @@ public class GuiMainMenu extends GuiMenu{
 		buttonList.add(new GuiButton(1,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Open Editor (Buggy as all hell!)"));
 		buttonY += 50;
 		buttonList.add(new GuiButton(2,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Quit Game"));
+		
+		if(debug)
+		{
+			buttonList.add(new GuiButton(3,new Vector2(0,screenHeight()-100),new Vector2(300,40),"Convert all to XML"));
+		}
 	}
 	
 	@Override
@@ -90,6 +98,19 @@ public class GuiMainMenu extends GuiMenu{
 			Remote2D.guiList.push(new GuiEditor());
 		else if(button.id == 2)
 			Remote2D.running = false;
+		else if(button.id == 3)
+			R2DFileUtility.convertFolderToXML("res", true);
+	}
+	
+	@Override
+	public void tick(int i, int j, int k)
+	{
+		super.tick(i, j, k);
+		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_D))
+		{
+			debug = !debug;
+			initGui();
+		}
 	}
 	
 	@Override

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<r2dxml>
+    <type id="10" name="ground.entity">
+        <type id="11" name="dim">
+            <x>64.0</x>
+            <y>64.0</y>
+        </type>
+        <type id="9" name="repeatTex">false</type>
+        <type id="9" name="linearScaling">false</type>
+        <type id="5" name="rotation">0.0</type>
+        <type id="3" name="componentCount">1</type>
+        <type id="8" name="name">Ground</type>
+        <type id="8" name="uuid">9ee1e109-c9ab-4ee1-8eba-c54dc650607f</type>
+        <type id="10" name="component_0">
+            <type id="11" name="dim">
+                <x>64.0</x>
+                <y>64.0</y>
+            </type>
+            <type id="8" name="className">Box Collider</type>
+            <type id="8" name="uuid">ef54839b-14b6-463a-bd15-07486cae52e3</type>
+            <type id="11" name="pos">
+                <x>0.0</x>
+                <y>0.0</y>
+            </type>
+        </type>
+        <type id="10" name="material">
+            <type id="5" name="Alpha">1.0</type>
+            <type id="1" name="RenderType">0</type>
+            <type id="3" name="Color">-26368</type>
+        </type>
+        <type id="11" name="pos">
+            <x>0.0</x>
+            <y>0.0</y>
+        </type>
+    </type>
+</r2dxml>
