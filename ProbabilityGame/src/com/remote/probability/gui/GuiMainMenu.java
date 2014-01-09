@@ -11,7 +11,6 @@ import com.remote.remote2d.engine.StretchType;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.gui.GuiButton;
-import com.remote.remote2d.engine.gui.GuiInGame;
 import com.remote.remote2d.engine.gui.GuiMenu;
 import com.remote.remote2d.engine.io.R2DFileUtility;
 import com.remote.remote2d.engine.logic.Vector2;
@@ -93,7 +92,7 @@ public class GuiMainMenu extends GuiMenu{
 //					+ "unplayable in case of piracy!  Nice try, pirate!";
 //			lastMessageTime = System.currentTimeMillis();
 			MapGenerator gen = new MapGeneratorSimple();
-			Remote2D.guiList.push(new GuiInGame(gen.generateTiledMap(100, 100, 1337)));
+			Remote2D.guiList.push(new GuiLoadMap(gen, 100, 100, 1337));
 		} else if(button.id == 1)
 			Remote2D.guiList.push(new GuiEditor());
 		else if(button.id == 2)
