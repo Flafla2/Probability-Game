@@ -5,7 +5,6 @@ import com.remote.probability.world.MapGenerator.ProgressMeter;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
-import com.remote.remote2d.engine.gui.GuiInGame;
 import com.remote.remote2d.engine.gui.GuiMenu;
 import com.remote.remote2d.engine.logic.Vector2;
 import com.remote.remote2d.engine.world.Map;
@@ -42,7 +41,7 @@ public class GuiLoadMap extends GuiMenu {
 			public void run() {
 				Map map = gen.generateTiledMap(width, height, seed, progress);
 				Remote2D.guiList.pop();
-				Remote2D.guiList.push(new GuiInGame(map));
+				Remote2D.guiList.push(Remote2D.getGame().getNewInGameGui(map));
 			}
 		});
 		

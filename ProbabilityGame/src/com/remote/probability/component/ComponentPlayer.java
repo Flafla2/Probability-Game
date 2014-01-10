@@ -1,14 +1,19 @@
 package com.remote.probability.component;
 
+import java.util.Random;
+
 import org.lwjgl.input.Keyboard;
 
+import com.remote.probability.gui.GuiInGame;
+import com.remote.probability.gui.GuiInGame.DebugModule;
 import com.remote.remote2d.engine.DisplayHandler;
 import com.remote.remote2d.engine.art.Animation;
+import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Material.RenderType;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.logic.Vector2;
 
-public class ComponentPlayer extends Component {
+public class ComponentPlayer extends Component implements DebugModule {
 	
 	public Animation northAnimation;
 	public Animation southAnimation;
@@ -21,6 +26,9 @@ public class ComponentPlayer extends Component {
 	
 	private static final float WALK_SPEED = 10;
 	private static final float DIAG_WALK_SPEED = (float)Math.sqrt(WALK_SPEED*WALK_SPEED/2);
+	
+	private long[] times;
+	private int[] colors;
 
 	@Override
 	public void init() {
@@ -29,12 +37,39 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void onEntitySpawn() {
-		
+		if(GuiInGame.module != this)
+		{
+			GuiInGame.module = this;
+		}
 	}
 
 	@Override
 	public void renderAfter(boolean arg0, float arg1) {
 		
+	}
+	
+	@Override
+	public void renderDebug(float interpolation) {
+		if(colors == null || times.length != colors.length)
+		{
+			colors = new int[times.length];
+			Random rand = new Random();
+			for(int x=0;x<colors.length;x++)
+				colors[x] = rand.nextInt(0xffffff);
+		}
+		
+		Renderer.pushMatrix();
+		Renderer.loadIdentity();
+		int currentY = 0;
+		float lastTime = (float)(times[times.length-1]-times[0]);
+		for(int x=1;x<times.length;x++)
+		{
+			float currentTime = (float)(times[x]-times[x-1]);
+			float time = currentTime/lastTime;
+			Renderer.drawRect(new Vector2(0,currentY), new Vector2(200*time,40), colors[x], 1.0f);
+			currentY += 40;
+		}
+		Renderer.popMatrix();
 	}
 
 	@Override
@@ -44,18 +79,26 @@ public class ComponentPlayer extends Component {
 	
 	@Override
 	public void tick(int i, int j, int k) {
+		times = new long[6];
+		times[0] = System.nanoTime();
 		Vector2 mouseToCenter = new Vector2(i,j).subtract(DisplayHandler.getDimensions().divide(new Vector2(2)));
 		double angle = Math.toDegrees(Math.atan2(mouseToCenter.y, mouseToCenter.x));
+		
+		times[1] = System.nanoTime();
 		
 		if(entity.material.getRenderType() != RenderType.ANIM)
 			entity.material.setRenderType(RenderType.ANIM);
 		
 		direction = getDirectionWithAngle(angle);
 		
+		times[2] = System.nanoTime();
+		
 		Animation target = updateTargetAnim();
 		
 		if(entity.material.getAnimation() == null || !entity.material.getAnimation().equals(target))
 			entity.material.setAnimation(target);
+		
+		times[3] = System.nanoTime();
 		
 		boolean w = Keyboard.isKeyDown(Keyboard.KEY_W);
 		boolean s = Keyboard.isKeyDown(Keyboard.KEY_S);
@@ -84,6 +127,8 @@ public class ComponentPlayer extends Component {
 		
 		entity.pos = entity.pos.add(velocity);
 		
+		times[4] = System.nanoTime();
+		
 		if(entity.material.getAnimation() != null)
 		{
 			entity.material.getAnimation().flippedX = flipped;
@@ -94,6 +139,8 @@ public class ComponentPlayer extends Component {
 		
 		entity.getMap().camera.pos = entity.pos.add(entity.dim.divide(new Vector2(2)));
 		entity.getMap().camera.updatePos();
+		
+		times[5] = System.nanoTime();
 	}
 
 	@Override
