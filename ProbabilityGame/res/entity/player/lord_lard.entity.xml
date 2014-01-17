@@ -7,15 +7,24 @@
         </type>
         <type id="3" name="componentCount">1</type>
         <type id="5" name="rotation">0.0</type>
-        <type id="8" name="name">Player</type>
-        <type id="8" name="uuid">34b984ca-85ac-40e8-8d1d-6f2b011d81df</type>
+        <type id="8" name="name"/>
+        <type id="8" name="uuid">bced2f30-6a21-40d0-87a9-cc5180e43286</type>
         <type id="10" name="component_0">
+            <type id="11" name="hitboxPos">
+                <x>12.0</x>
+                <y>0.0</y>
+            </type>
             <type id="8" name="eastAnimation">res/anim/player/lard_east.anim.xml</type>
             <type id="8" name="southEastAnimation">res/anim/player/lard_southeast.anim.xml</type>
+            <type id="11" name="hitboxDim">
+                <x>40.0</x>
+                <y>62.0</y>
+            </type>
             <type id="8" name="southAnimation">res/anim/player/lard_south.anim.xml</type>
             <type id="8" name="className">Player</type>
             <type id="8" name="uuid">58e356e1-a6b9-4e6e-98d3-81d017bf61e2</type>
             <type id="8" name="northAnimation">res/anim/player/lard_north.anim.xml</type>
+            <type id="8" name="bulletPrefab">res/entity/bullet.entity.xml</type>
             <type id="8" name="northEastAnimation">res/anim/player/lard_northeast.anim.xml</type>
         </type>
         <type id="10" name="material">
@@ -24,7 +33,7 @@
                 <y>1.0</y>
             </type>
             <type id="5" name="Alpha">1.0</type>
-            <type id="8" name="Animation">res/anim/player/lard_north.anim.xml</type>
+            <type id="8" name="Animation">res/anim/player/lard_southeast.anim.xml</type>
             <type id="11" name="uvPos">
                 <x>0.0</x>
                 <y>0.0</y>

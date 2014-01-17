@@ -1,6 +1,7 @@
 package com.remote.probability;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.probability.component.ComponentBullet;
 import com.remote.probability.component.ComponentPlayer;
 import com.remote.probability.gui.GuiInGame;
 import com.remote.probability.gui.GuiMainMenu;
@@ -14,18 +15,25 @@ import com.remote.remote2d.engine.world.Map;
 
 public class Game extends Remote2DGame {
 	
+	public static final double ONE_OVER_SQRT2 = 0.70710678118;
+	
 	public static void main(String[] args)
 	{
-		//Remote2D.MAX_UPDATES_BEFORE_RENDER = 1;
 		Remote2D.startRemote2D(new Game());
 	}
 
 	@Override
 	public void initGame() {
+		//Remote2D.MAX_UPDATES_BEFORE_RENDER = 1;
+		
+		Remote2D.setTargetFPS(60);
+		Remote2D.setTargetTPS(30);
+		
 		Log.DEBUG();
 		Fonts.add("Jungle", "res/fonts/jungle.ttf", false);
 		
 		InsertableComponentList.addInsertableComponent("Player", ComponentPlayer.class);
+		InsertableComponentList.addInsertableComponent("Bullet", ComponentBullet.class);
 		
 		Remote2D.guiList.push(new GuiMainMenu());
 	}

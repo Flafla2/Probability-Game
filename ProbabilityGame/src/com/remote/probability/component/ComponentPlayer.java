@@ -1,15 +1,13 @@
 package com.remote.probability.component;
 
-import java.util.Random;
-
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
-import com.remote.probability.gui.GuiInGame;
-import com.remote.probability.gui.GuiInGame.DebugModule;
+import com.remote.probability.Game;
 import com.remote.remote2d.engine.DisplayHandler;
 import com.remote.remote2d.engine.art.Animation;
-import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.art.Material.RenderType;
+import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.logic.Vector2;
 
@@ -21,11 +19,18 @@ public class ComponentPlayer extends Component {
 	public Animation northEastAnimation;
 	public Animation southEastAnimation;
 	
+	public String bulletPrefab;
+	
+	public Vector2 hitboxPos;
+	public Vector2 hitboxDim;
+	
 	private boolean flipped = false;
 	private Direction direction = Direction.SOUTH;
+	private long bulletTimer = 0;
 	
 	private static final float WALK_SPEED = 10;
-	private static final float DIAG_WALK_SPEED = (float)Math.sqrt(WALK_SPEED*WALK_SPEED/2);
+	private static final float DIAG_WALK_SPEED = (float) (WALK_SPEED*Game.ONE_OVER_SQRT2);
+	private static final long BULLET_INTERVAL = 150;
 
 	@Override
 	public void init() {
@@ -38,8 +43,9 @@ public class ComponentPlayer extends Component {
 	}
 
 	@Override
-	public void renderAfter(boolean arg0, float arg1) {
-		
+	public void renderAfter(boolean editor, float interpolation) {
+		if(editor)
+			entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim).drawCollider(0x00ff00);
 	}
 
 	@Override
@@ -87,7 +93,8 @@ public class ComponentPlayer extends Component {
 			if(d) velocity.x = DIAG_WALK_SPEED;
 		}
 		
-		entity.pos = entity.pos.add(velocity);		
+		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).getColliderWithDim(hitboxDim), velocity);
+		entity.pos = entity.pos.add(velocity.add(correction));		
 		if(entity.material.getAnimation() != null)
 		{
 			entity.material.getAnimation().flippedX = flipped;
@@ -97,7 +104,53 @@ public class ComponentPlayer extends Component {
 		}
 		
 		entity.getMap().camera.pos = entity.pos.add(entity.dim.divide(new Vector2(2)));
-		entity.getMap().camera.updatePos();
+		//entity.getMap().camera.updatePos();
+		
+		if(Mouse.isButtonDown(0))
+		{
+			if(System.currentTimeMillis()-bulletTimer >= BULLET_INTERVAL)
+			{
+				boolean behindPlayer = direction == Direction.NORTH || direction == Direction.NORTHEAST || direction == Direction.NORTHWEST;
+				int index = entity.getMap().getEntityList().indexOf(entity);
+				Entity bullet = entity.getMap().getEntityList().instantiatePrefab(bulletPrefab,behindPlayer ? index : index+1);
+				bullet.pos = entity.pos.copy().add(getBulletSpawnPosLocal(bullet.dim));
+				bullet.updatePos();
+				bulletTimer = System.currentTimeMillis();
+				
+				ComponentBullet comp = bullet.getComponentsOfType(ComponentBullet.class).get(0);
+				comp.setDirection(direction);
+				bulletTimer = System.currentTimeMillis();
+			}
+		} else
+			bulletTimer = 0;
+	}
+	
+	private Vector2 getBulletSpawnPosLocal(Vector2 bulletDim)
+	{
+		Vector2 halfEntity = hitboxDim.divide(new Vector2(2));
+		Vector2 halfBullet = bulletDim.divide(new Vector2(2));
+		Vector2 centerBullet = halfEntity.subtract(halfBullet);
+		switch(direction)
+		{
+		case SOUTH:
+			return new Vector2(centerBullet.x,hitboxDim.y).add(hitboxPos);
+		case NORTH:
+			return new Vector2(centerBullet.x,0).add(hitboxPos);
+		case EAST:
+			return new Vector2(hitboxDim.x,centerBullet.y).add(hitboxPos);
+		case WEST:
+			return new Vector2(0,centerBullet.y).add(hitboxPos);
+		case SOUTHEAST:
+			return new Vector2(hitboxDim.x,hitboxDim.y).add(hitboxPos);
+		case SOUTHWEST:
+			return new Vector2(-bulletDim.x,hitboxDim.y).add(hitboxPos);
+		case NORTHEAST:
+			return new Vector2(hitboxDim.x,-bulletDim.y).add(hitboxPos);
+		case NORTHWEST:
+			return new Vector2(-bulletDim.x,-bulletDim.y).add(hitboxPos);
+		default:
+			return centerBullet;
+		}
 	}
 
 	@Override
@@ -168,7 +221,7 @@ public class ComponentPlayer extends Component {
 		return Direction.SOUTH;
 	}
 	
-	private enum Direction
+	public enum Direction
 	{
 		NORTH, NORTHEAST, EAST, SOUTHEAST, SOUTH, SOUTHWEST, WEST, NORTHWEST;
 	}
