@@ -2,8 +2,11 @@ package com.remote.probability.component;
 
 import java.awt.Color;
 
+import com.esotericsoftware.minlog.Log;
 import com.remote.probability.Game;
 import com.remote.probability.component.ComponentPlayer.Direction;
+import com.remote.probability.world.GameStatistics;
+import com.remote.probability.world.Tile;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
@@ -103,7 +106,9 @@ public class ComponentEnemy extends Component {
 			}
 		}
 		
-		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).getColliderWithDim(hitboxDim), velocity);
+		Vector2 correction = new Vector2(0,0);
+		if(goingIntoWallTile(entity.pos.add(velocity)))
+			correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).getColliderWithDim(hitboxDim), velocity);
 		entity.pos = entity.pos.add(velocity.add(correction));		
 		if(entity.material.getAnimation() != null)
 		{
@@ -117,6 +122,25 @@ public class ComponentEnemy extends Component {
 	@Override
 	public void apply() {
 		
+	}
+	
+	private boolean goingIntoWallTile(Vector2 pos)
+	{
+		byte[] ret = new byte[4];
+		float x = (pos.x+hitboxPos.x)/((float)GameStatistics.tileSize);
+		float y = (pos.y+hitboxPos.y)/((float)GameStatistics.tileSize);
+		float xDim = hitboxDim.x/((float)GameStatistics.tileSize);
+		float yDim = hitboxDim.y/((float)GameStatistics.tileSize);
+		ret[0] = GameStatistics.map[(int)x][(int)y];
+		ret[1] = GameStatistics.map[(int)(x+xDim)][(int)y];
+		ret[2] = GameStatistics.map[(int)(x+xDim)][(int)(y+yDim)];
+		ret[3] = GameStatistics.map[(int)x][(int)(y+yDim)];
+		
+		for(int i=0;i<ret.length;i++)
+			if(!Tile.tiles[ret[i]].getWalkable())
+				return true;
+		
+		return false;
 	}
 	
 	private void tickAI()

@@ -70,6 +70,9 @@ public abstract class MapGenerator {
 			}
 		}
 		
+		GameStatistics.map = tiles;
+		GameStatistics.tileSize = tileWidth;
+		
 		return map;
 	}
 	
