@@ -1,5 +1,7 @@
 package com.remote.probability.world;
 
+import com.remote.probability.Game;
+import com.remote.probability.component.ComponentEnemy;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.logic.Vector2;
 import com.remote.remote2d.engine.world.Map;
@@ -44,7 +46,28 @@ public abstract class MapGenerator {
 				}
 			}
 			if(i == 1)
-				map.getEntityList().instantiatePrefab(PLAYER).pos = new Vector2(px*DEFAULT_TILE_SIZE,py*DEFAULT_TILE_SIZE);
+			{
+				Entity player = map.getEntityList().instantiatePrefab(PLAYER);
+				player.pos = new Vector2(px*tileWidth,py*tileWidth);
+				
+				for(int x=0;x<tiles.length;x++)
+				{
+					for(int y=0;y<tiles[x].length;y++)
+					{
+						if(x == px && y == py)
+							continue;
+						
+						int rand = Game.random.nextInt(50);
+						if(rand == 0)
+						{
+							Entity e = map.getEntityList().instantiatePrefab("res/entity/enemy/mummy.entity.xml");
+							e.pos = new Vector2(x*tileWidth,y*tileWidth);
+							e.getComponentsOfType(ComponentEnemy.class).get(0).player = player;
+						}
+					}
+				}
+				
+			}
 		}
 		
 		return map;

@@ -1,8 +1,12 @@
 package com.remote.probability.component;
 
+import java.util.ArrayList;
+
 import com.remote.probability.Game;
 import com.remote.probability.component.ComponentPlayer.Direction;
+import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
+import com.remote.remote2d.engine.logic.Collider;
 import com.remote.remote2d.engine.logic.ColliderBox;
 import com.remote.remote2d.engine.logic.Vector2;
 
@@ -81,6 +85,22 @@ public class ComponentBullet extends Component {
 		if((despawnTimer != -1 && System.currentTimeMillis()-despawnTimer >= DESPAWN_TIME) || hits)
 		{
 			entity.getMap().getEntityList().removeEntityFromList(entity);
+		}
+		
+		for(int x = 0;x<entity.getMap().getEntityList().size();x++)
+		{
+			Entity e = entity.getMap().getEntityList().get(x);
+			Vector2 distance = e.pos.subtract(entity.pos).abs();
+			int distSquared = (int) (distance.x*distance.x+distance.y*distance.y);
+			if(distSquared > 128) //TODO: Change to calculated distance
+				continue;
+			
+			ArrayList<ComponentEnemy> comps = e.getComponentsOfType(ComponentEnemy.class);
+			for(ComponentEnemy comp : comps)
+			{
+				if(Collider.collides(getCollider(),comp.hitboxPos.add(e.pos).getColliderWithDim(comp.hitboxDim)))
+					comp.hit(movement);
+			}
 		}
 	}
 	

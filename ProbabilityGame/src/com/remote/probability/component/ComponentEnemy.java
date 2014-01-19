@@ -1,10 +1,14 @@
 package com.remote.probability.component;
 
+import java.awt.Color;
+
 import com.remote.probability.Game;
 import com.remote.probability.component.ComponentPlayer.Direction;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
+import com.remote.remote2d.engine.logic.Collider;
+import com.remote.remote2d.engine.logic.ColliderBox;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class ComponentEnemy extends Component {
@@ -25,6 +29,7 @@ public class ComponentEnemy extends Component {
 	private Direction direction = Direction.SOUTH;
 	private long nextWanderCalc = -1;
 	private Vector2 hitbackVelocity = new Vector2(0,0);
+	private long lastHitTime = -1;
 	
 	public float walkSpeed = 10;
 	
@@ -46,7 +51,8 @@ public class ComponentEnemy extends Component {
 
 	@Override
 	public void renderBefore(boolean arg0, float arg1) {
-		
+		float fade = 1-((float)Math.max(500,lastHitTime-System.currentTimeMillis()))/500f;
+		entity.material.setColor(new Color(1,fade,fade,1));
 	}
 	
 	@Override
@@ -78,6 +84,22 @@ public class ComponentEnemy extends Component {
 				break;
 			default:
 				break;
+			}
+		}
+		
+		velocity.x += hitbackVelocity.x;
+		velocity.y += hitbackVelocity.y;
+		hitbackVelocity.x = Math.max(hitbackVelocity.x-5, 0);
+		hitbackVelocity.y = Math.max(hitbackVelocity.y-5, 0);
+		
+		if(player != null)
+		{
+			ComponentPlayer comp = player.getComponentsOfType(ComponentPlayer.class).get(0);
+			ColliderBox playerHitbox = player.pos.add(comp.hitboxPos).getColliderWithDim(comp.hitboxDim);
+			ColliderBox enemyHitbox = entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim);
+			if(Collider.collides(playerHitbox,enemyHitbox))
+			{
+				//TODO: Add player hit recoil
 			}
 		}
 		
@@ -136,6 +158,13 @@ public class ComponentEnemy extends Component {
 					direction = Direction.NORTH;
 			}
 		}
+	}
+	
+	public void hit(Vector2 velocity)
+	{
+		hitbackVelocity.x = velocity.x;
+		hitbackVelocity.y = velocity.y;
+		lastHitTime = System.currentTimeMillis();
 	}
 	
 	private Animation updateTargetAnim()
