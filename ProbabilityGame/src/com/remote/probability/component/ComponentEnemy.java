@@ -1,0 +1,168 @@
+package com.remote.probability.component;
+
+import com.remote.probability.Game;
+import com.remote.probability.component.ComponentPlayer.Direction;
+import com.remote.remote2d.engine.art.Animation;
+import com.remote.remote2d.engine.entity.Entity;
+import com.remote.remote2d.engine.entity.component.Component;
+import com.remote.remote2d.engine.logic.Vector2;
+
+public class ComponentEnemy extends Component {
+	
+	public Entity player;
+	
+	public int detectionDistance;
+
+	public Animation northAnimation;
+	public Animation southAnimation;
+	public Animation eastAnimation;
+		
+	public Vector2 hitboxPos;
+	public Vector2 hitboxDim;
+	
+	private boolean flipped = false;
+	private boolean moving = false;
+	private Direction direction = Direction.SOUTH;
+	private long nextWanderCalc = -1;
+	private Vector2 hitbackVelocity = new Vector2(0,0);
+	
+	public float walkSpeed = 10;
+	
+	@Override
+	public void init() {
+		
+	}
+
+	@Override
+	public void onEntitySpawn() {
+		
+	}
+
+	@Override
+	public void renderAfter(boolean editor, float interpolation) {
+		if(editor)
+			entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim).drawCollider(0x00ff00);
+	}
+
+	@Override
+	public void renderBefore(boolean arg0, float arg1) {
+		
+	}
+	
+	@Override
+	public void tick(int i, int j, int k) {
+		tickAI();
+		
+		Animation target = updateTargetAnim();
+		
+		if(entity.material.getAnimation() == null || !entity.material.getAnimation().equals(target))
+			entity.material.setAnimation(target);
+		
+		Vector2 velocity = new Vector2(0,0);
+		
+		if(moving)
+		{
+			switch(direction)
+			{
+			case NORTH:
+				velocity.y = -walkSpeed;
+				break;
+			case SOUTH:
+				velocity.y = walkSpeed;
+				break;
+			case WEST:
+				velocity.x = -walkSpeed;
+				break;
+			case EAST:
+				velocity.x = walkSpeed;
+				break;
+			default:
+				break;
+			}
+		}
+		
+		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).getColliderWithDim(hitboxDim), velocity);
+		entity.pos = entity.pos.add(velocity.add(correction));		
+		if(entity.material.getAnimation() != null)
+		{
+			entity.material.getAnimation().flippedX = flipped;
+			entity.material.getAnimation().animate = moving;
+			if(!moving)
+				entity.material.getAnimation().setCurrentFrame(0);
+		}
+	}
+
+	@Override
+	public void apply() {
+		
+	}
+	
+	private void tickAI()
+	{
+		final long time = System.currentTimeMillis();
+		if(player == null)
+			return;
+		
+		final Vector2 playerCenter = 	new Vector2(player.pos.x+player.dim.x/2,player.pos.y+player.dim.y/2);
+		final Vector2 enemyCenter =		new Vector2(entity.pos.x+entity.dim.x/2,entity.pos.y+entity.dim.y/2);
+		final Vector2 distanceVector = playerCenter.subtract(enemyCenter).abs();
+		final int distanceSquared = (int) (distanceVector.x*distanceVector.x+distanceVector.y*distanceVector.y);
+		final boolean detected = distanceSquared < detectionDistance*detectionDistance;
+		
+		if(!detected && time >= nextWanderCalc)
+		{
+			int randDir = Game.random.nextInt(8);
+					if(randDir == 0) direction = Direction.NORTH;
+			else 	if(randDir == 1) direction = Direction.SOUTH;
+			else 	if(randDir == 2) direction = Direction.EAST;
+			else 	if(randDir == 3) direction = Direction.WEST;
+			
+			moving = Game.random.nextInt(5) != 0;
+			nextWanderCalc = System.currentTimeMillis()+Game.random.nextInt(10000)-5000;
+		} else if(detected)
+		{
+			moving = true;
+			if(distanceVector.x > distanceVector.y)
+			{
+				if(distanceVector.x > 0)
+					direction = Direction.EAST;
+				else
+					direction = Direction.WEST;
+			} else
+			{
+				if(distanceVector.y > 0)
+					direction = Direction.SOUTH;
+				else
+					direction = Direction.NORTH;
+			}
+		}
+	}
+	
+	private Animation updateTargetAnim()
+	{
+		Animation target = null;
+		switch(direction)
+		{
+		case EAST:
+			target = eastAnimation;
+			flipped = false;
+			break;
+		case WEST:
+			target = eastAnimation;
+			flipped = true;
+			break;
+		case NORTH:
+			target = northAnimation;
+			flipped = false;
+			break;
+		case SOUTH:
+			target = southAnimation;
+			flipped = false;
+			break;
+		default:
+			break;
+		}
+		return target;
+	}
+
+}

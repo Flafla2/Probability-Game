@@ -1,5 +1,7 @@
 package com.remote.probability;
 
+import java.util.Random;
+
 import com.esotericsoftware.minlog.Log;
 import com.remote.probability.component.ComponentBullet;
 import com.remote.probability.component.ComponentPlayer;
@@ -16,6 +18,7 @@ import com.remote.remote2d.engine.world.Map;
 public class Game extends Remote2DGame {
 	
 	public static final double ONE_OVER_SQRT2 = 0.70710678118;
+	public static final Random random = new Random();
 	
 	public static void main(String[] args)
 	{
