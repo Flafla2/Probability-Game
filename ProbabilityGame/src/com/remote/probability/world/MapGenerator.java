@@ -54,7 +54,7 @@ public abstract class MapGenerator {
 				{
 					for(int y=0;y<tiles[x].length;y++)
 					{
-						if(x == px && y == py)
+						if((x == px && y == py) || !Tile.tiles[tiles[x][y]].getWalkable())
 							continue;
 						
 						int rand = Game.random.nextInt(50);
