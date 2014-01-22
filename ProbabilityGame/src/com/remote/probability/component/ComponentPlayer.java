@@ -93,7 +93,7 @@ public class ComponentPlayer extends Component {
 			if(d) velocity.x = DIAG_WALK_SPEED;
 		}
 		
-		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).getColliderWithDim(hitboxDim), velocity);
+		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
 		entity.pos = entity.pos.add(velocity.add(correction));		
 		if(entity.material.getAnimation() != null)
 		{

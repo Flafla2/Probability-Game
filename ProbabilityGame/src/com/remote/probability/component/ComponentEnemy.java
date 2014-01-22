@@ -2,7 +2,6 @@ package com.remote.probability.component;
 
 import java.awt.Color;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.probability.Game;
 import com.remote.probability.component.ComponentPlayer.Direction;
 import com.remote.probability.world.GameStatistics;
@@ -108,7 +107,7 @@ public class ComponentEnemy extends Component {
 		
 		Vector2 correction = new Vector2(0,0);
 		if(goingIntoWallTile(entity.pos.add(velocity)))
-			correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).getColliderWithDim(hitboxDim), velocity);
+			correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
 		entity.pos = entity.pos.add(velocity.add(correction));		
 		if(entity.material.getAnimation() != null)
 		{
