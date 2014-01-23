@@ -1,10 +1,15 @@
 package com.remote.probability.component;
 
+import java.awt.Color;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.remote.probability.Game;
+import com.remote.probability.gui.GuiDead;
+import com.remote.probability.world.GameStatistics;
 import com.remote.remote2d.engine.DisplayHandler;
+import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Material.RenderType;
 import com.remote.remote2d.engine.entity.Entity;
@@ -24,9 +29,14 @@ public class ComponentPlayer extends Component {
 	public Vector2 hitboxPos;
 	public Vector2 hitboxDim;
 	
+	public int maxHealth = 100;
+	
 	private boolean flipped = false;
 	private Direction direction = Direction.SOUTH;
 	private long bulletTimer = 0;
+	
+	private Vector2 hitbackVelocity = new Vector2(0,0);
+	private long lastHitTime = -1;
 	
 	private static final float WALK_SPEED = 10;
 	private static final float DIAG_WALK_SPEED = (float) (WALK_SPEED*Game.ONE_OVER_SQRT2);
@@ -50,7 +60,8 @@ public class ComponentPlayer extends Component {
 
 	@Override
 	public void renderBefore(boolean arg0, float arg1) {
-		
+		float hitGradient = (float) (Math.min(500d,(double)(System.currentTimeMillis()-lastHitTime))/500f);
+		entity.material.setColor(new Color(1,hitGradient,hitGradient,1));
 	}
 	
 	@Override
@@ -92,6 +103,15 @@ public class ComponentPlayer extends Component {
 			if(a) velocity.x = -DIAG_WALK_SPEED;
 			if(d) velocity.x = DIAG_WALK_SPEED;
 		}
+		
+		velocity.x += hitbackVelocity.x;
+		velocity.y += hitbackVelocity.y;
+		if(hitbackVelocity.x > 0.1)
+			hitbackVelocity.x -= hitbackVelocity.x/4;
+		else hitbackVelocity.x = 0;
+		if(hitbackVelocity.y > 0.1)
+			hitbackVelocity.y -= hitbackVelocity.y/4;
+		else hitbackVelocity.y = 0;
 		
 		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
 		entity.pos = entity.pos.add(velocity.add(correction));		
@@ -197,6 +217,21 @@ public class ComponentPlayer extends Component {
 			break;
 		}
 		return target;
+	}
+	
+	public void hit(Vector2 normal, int damage)
+	{
+		hitbackVelocity.x = normal.x*20;
+		hitbackVelocity.y = normal.y*20;
+		if(damage != 0)
+			lastHitTime = System.currentTimeMillis();
+		
+		GameStatistics.playerHealth -= ((double)damage)/maxHealth;
+		if(GameStatistics.playerHealth <= 0)
+		{
+			Remote2D.guiList.pop();
+			Remote2D.guiList.push(new GuiDead());
+		}
 	}
 	
 	private Direction getDirectionWithAngle(double angle)

@@ -10,6 +10,7 @@ import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.entity.Entity;
+import com.remote.remote2d.engine.entity.EntityList;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.logic.Collider;
 import com.remote.remote2d.engine.logic.ColliderBox;
@@ -21,6 +22,8 @@ public class ComponentEnemy extends Component {
 	
 	public int detectionDistance;
 	public double maxHealth = 100;
+	public int attackFrequency = 500;
+	public int damage = 5;
 	
 	public Animation northAnimation;
 	public Animation southAnimation;
@@ -33,6 +36,7 @@ public class ComponentEnemy extends Component {
 	private boolean moving = false;
 	private Direction direction = Direction.SOUTH;
 	private long nextWanderCalc = -1;
+	private long lastAttackTime = -1;
 	private Vector2 hitbackVelocity = new Vector2(0,0);
 	private long lastHitTime = -1;
 	private double health = 1.0;
@@ -116,12 +120,14 @@ public class ComponentEnemy extends Component {
 		
 		if(player != null)
 		{
+			boolean canAttack = System.currentTimeMillis()-lastAttackTime > attackFrequency;
 			ComponentPlayer comp = player.getComponentsOfType(ComponentPlayer.class).get(0);
 			ColliderBox playerHitbox = player.pos.add(comp.hitboxPos).getColliderWithDim(comp.hitboxDim);
 			ColliderBox enemyHitbox = entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim);
 			if(Collider.collides(playerHitbox,enemyHitbox))
 			{
-				//TODO: Add player hit recoil
+				comp.hit(velocity.normalize(), canAttack ? damage : 0);
+				lastAttackTime = System.currentTimeMillis();
 			}
 		}
 		
@@ -193,13 +199,13 @@ public class ComponentEnemy extends Component {
 			moving = true;
 			nextWanderCalc = -1;
 			final Vector2 noAbsDistance = playerCenter.subtract(enemyCenter);
-			if(distanceVector.x > distanceVector.y)
+			if(distanceVector.x-10 > distanceVector.y)
 			{
 				if(noAbsDistance.x > 0)
 					direction = Direction.EAST;
 				else
 					direction = Direction.WEST;
-			} else
+			} else if(distanceVector.x < distanceVector.y-10)
 			{
 				if(noAbsDistance.y > 0)
 					direction = Direction.SOUTH;
@@ -219,7 +225,14 @@ public class ComponentEnemy extends Component {
 		
 		health -= ((double)damage)/maxHealth;
 		if(health <= 0)
+		{
+			EntityList list = entity.getMap().getEntityList();
+			Entity explosion = list.instantiatePrefab("res/entity/effects/explosion_big.entity.xml", list.indexOf(entity));
+			explosion.pos.x = entity.pos.x+entity.dim.x/2-explosion.dim.x/2;
+			explosion.pos.y = entity.pos.y+entity.dim.y-explosion.dim.y;
+			
 			entity.getMap().getEntityList().removeEntityFromList(entity);
+		}
 	}
 	
 	public double getHealth()

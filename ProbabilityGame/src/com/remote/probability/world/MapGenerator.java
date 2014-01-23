@@ -2,7 +2,6 @@ package com.remote.probability.world;
 
 import java.util.Random;
 
-import com.remote.probability.Game;
 import com.remote.probability.component.ComponentEnemy;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.logic.Vector2;
@@ -62,12 +61,21 @@ public abstract class MapGenerator {
 						if((x == px && y == py) || !Tile.tiles[tiles[x][y]].getWalkable())
 							continue;
 						
-						int rand = Game.random.nextInt(50);
+						boolean top = y != 0 && !Tile.tiles[tiles[x][y-1]].getWalkable();
+						boolean bot = y != tiles[x].length-1 && !Tile.tiles[tiles[x][y+1]].getWalkable();
+						boolean lef = x != 0 && !Tile.tiles[tiles[x-1][y]].getWalkable();
+						boolean rig = x != tiles.length-1 && !Tile.tiles[tiles[x+1][y]].getWalkable();
+						
+						if(top || bot || lef || rig)
+							continue;
+												
+						int rand = random.nextInt(50);
 						if(rand == 0)
 						{
 							Entity e = map.getEntityList().instantiatePrefab("res/entity/enemy/mummy.entity.xml");
-							e.pos = new Vector2(x*tileWidth,y*tileWidth);
-							e.getComponentsOfType(ComponentEnemy.class).get(0).player = player;
+							ComponentEnemy comp = e.getComponentsOfType(ComponentEnemy.class).get(0);
+							e.pos = new Vector2(x*tileWidth-comp.hitboxPos.x,y*tileWidth-comp.hitboxPos.y);
+							comp.player = player;
 						}
 					}
 				}

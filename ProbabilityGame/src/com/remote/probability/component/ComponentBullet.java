@@ -101,6 +101,7 @@ public class ComponentBullet extends Component {
 				{
 					comp.hit(movement.normalize(),10);
 					entity.getMap().getEntityList().removeEntityFromList(entity);
+					return;
 				}
 			}
 		}
