@@ -1,5 +1,7 @@
 package com.remote.probability.world;
 
+import java.util.Random;
+
 import com.remote.probability.Game;
 import com.remote.probability.component.ComponentEnemy;
 import com.remote.remote2d.engine.entity.Entity;
@@ -13,12 +15,12 @@ public abstract class MapGenerator {
 	
 	public abstract Map generateTiledMap(int width, int height, long seed, ProgressMeter progress);
 	
-	public static Map createMapFromTiles(byte[][] tiles, int px, int py, ProgressMeter progress)
+	public static Map createMapFromTiles(byte[][] tiles, int px, int py, Random random, ProgressMeter progress)
 	{
-		return createMapFromTiles(tiles, DEFAULT_TILE_SIZE, px, py, progress);
+		return createMapFromTiles(tiles, DEFAULT_TILE_SIZE, px, py, random, progress);
 	}
 	
-	public static Map createMapFromTiles(byte[][] tiles, int tileWidth, int px, int py, ProgressMeter progress)
+	public static Map createMapFromTiles(byte[][] tiles, int tileWidth, int px, int py, Random random, ProgressMeter progress)
 	{
 		Map map = new Map();
 		long num = 0;
@@ -40,6 +42,9 @@ public abstract class MapGenerator {
 					tile.dim = new Vector2(tileWidth,((float)tileWidth)*ratio);
 					tile.pos.y -= tile.dim.y-tileWidth;
 					tile.updatePos();
+					
+					if(tiles[x][y] == Tile.WALL.getID())
+						tile.material.setUVPos(new Vector2((float)(random.nextInt(23)+1)/24f,tile.material.getUVPos().y));
 					
 					num ++;
 					progress.mapLoadProgress = ((double)num)/(tiles.length*tiles[0].length);

@@ -32,7 +32,7 @@ public class MapGeneratorSimple extends MapGenerator {
 		}
 		
 		ret[width/2][height/2] = Tile.GROUND.getID();
-		Map m = createMapFromTiles(ret,width/2,height/2, progress);
+		Map m = createMapFromTiles(ret,width/2,height/2, rand, progress);
 		
 		return m;
 	}

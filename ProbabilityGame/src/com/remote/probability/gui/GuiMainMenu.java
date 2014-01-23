@@ -77,7 +77,7 @@ public class GuiMainMenu extends GuiMenu{
 	{
 		super.render(interpolation);
 		
-		Fonts.get("Jungle").drawString("WORKING TITLE", 10, screenHeight()/2-50, 100, 0x000000);
+		Fonts.get("Jungle").drawString("THE RISK FACTOR", 10, screenHeight()/2-50, 100, 0x000000);
 		
 		if(System.currentTimeMillis()-lastMessageTime < 8000)
 			Fonts.get("Arial").drawCenteredString(message, 200, 30, 0x000000);
@@ -92,7 +92,7 @@ public class GuiMainMenu extends GuiMenu{
 //					+ "unplayable in case of piracy!  Nice try, pirate!";
 //			lastMessageTime = System.currentTimeMillis();
 			MapGenerator gen = new MapGeneratorSimple();
-			Remote2D.guiList.push(new GuiLoadMap(gen, 100, 100, 1337));
+			Remote2D.guiList.push(new GuiLoadMap(gen, 40, 40, 1337));
 		} else if(button.id == 1)
 			Remote2D.guiList.push(new GuiEditor());
 		else if(button.id == 2)

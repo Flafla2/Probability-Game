@@ -7,6 +7,8 @@ import com.remote.probability.component.ComponentPlayer.Direction;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.Tile;
 import com.remote.remote2d.engine.art.Animation;
+import com.remote.remote2d.engine.art.Fonts;
+import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.logic.Collider;
@@ -18,7 +20,8 @@ public class ComponentEnemy extends Component {
 	public Entity player;
 	
 	public int detectionDistance;
-
+	public double maxHealth = 100;
+	
 	public Animation northAnimation;
 	public Animation southAnimation;
 	public Animation eastAnimation;
@@ -32,6 +35,8 @@ public class ComponentEnemy extends Component {
 	private long nextWanderCalc = -1;
 	private Vector2 hitbackVelocity = new Vector2(0,0);
 	private long lastHitTime = -1;
+	private double health = 1.0;
+	private boolean detected = false;
 	
 	public float walkSpeed = 10;
 	
@@ -49,12 +54,22 @@ public class ComponentEnemy extends Component {
 	public void renderAfter(boolean editor, float interpolation) {
 		if(editor)
 			entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim).drawCollider(0x00ff00);
+		
+		if(System.currentTimeMillis()-lastHitTime < 5000)
+		{
+			Vector2 pos = new Vector2(entity.pos.x+hitboxPos.x+hitboxDim.x/2-50,entity.pos.y+hitboxPos.y-20);
+			Renderer.drawRect(pos, new Vector2(100,10), 0x880000, 1);
+			Renderer.drawRect(pos, new Vector2((float)health*100,10), 0xff0000, 1);
+		}
+		
+		if(detected)
+			Fonts.get("Arial").drawString("!", entity.pos.x+entity.dim.x/2, entity.pos.y-20, 20, 0x00ff00);
 	}
 
 	@Override
 	public void renderBefore(boolean arg0, float arg1) {
-		float fade = 1-((float)Math.max(500,lastHitTime-System.currentTimeMillis()))/500f;
-		entity.material.setColor(new Color(1,fade,fade,1));
+		float hitGradient = (float) (Math.min(500d,(double)(System.currentTimeMillis()-lastHitTime))/500f);
+		entity.material.setColor(new Color(1,hitGradient,hitGradient,1));
 	}
 	
 	@Override
@@ -91,8 +106,13 @@ public class ComponentEnemy extends Component {
 		
 		velocity.x += hitbackVelocity.x;
 		velocity.y += hitbackVelocity.y;
-		hitbackVelocity.x = Math.max(hitbackVelocity.x-5, 0);
-		hitbackVelocity.y = Math.max(hitbackVelocity.y-5, 0);
+		if(hitbackVelocity.x > 0.1)
+			hitbackVelocity.x -= hitbackVelocity.x/4;
+		else hitbackVelocity.x = 0;
+		if(hitbackVelocity.y > 0.1)
+			hitbackVelocity.y -= hitbackVelocity.y/4;
+		else hitbackVelocity.y = 0;
+		
 		
 		if(player != null)
 		{
@@ -105,10 +125,14 @@ public class ComponentEnemy extends Component {
 			}
 		}
 		
-		Vector2 correction = new Vector2(0,0);
-		if(goingIntoWallTile(entity.pos.add(velocity)))
-			correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
-		entity.pos = entity.pos.add(velocity.add(correction));		
+		if(!goingIntoWallTile(entity.pos.add(velocity)))
+			entity.pos = entity.pos.add(velocity);
+		else if(!detected)
+		{
+			moving = false;
+			nextWanderCalc = System.currentTimeMillis()+Game.random.nextInt(1000);
+		}
+		
 		if(entity.material.getAnimation() != null)
 		{
 			entity.material.getAnimation().flippedX = flipped;
@@ -142,17 +166,17 @@ public class ComponentEnemy extends Component {
 		return false;
 	}
 	
-	private void tickAI()
+	private boolean tickAI()
 	{
 		final long time = System.currentTimeMillis();
 		if(player == null)
-			return;
+			return false;
 		
 		final Vector2 playerCenter = 	new Vector2(player.pos.x+player.dim.x/2,player.pos.y+player.dim.y/2);
 		final Vector2 enemyCenter =		new Vector2(entity.pos.x+entity.dim.x/2,entity.pos.y+entity.dim.y/2);
 		final Vector2 distanceVector = playerCenter.subtract(enemyCenter).abs();
 		final int distanceSquared = (int) (distanceVector.x*distanceVector.x+distanceVector.y*distanceVector.y);
-		final boolean detected = distanceSquared < detectionDistance*detectionDistance;
+		detected = distanceSquared < detectionDistance*detectionDistance;
 		
 		if(!detected && time >= nextWanderCalc)
 		{
@@ -167,27 +191,45 @@ public class ComponentEnemy extends Component {
 		} else if(detected)
 		{
 			moving = true;
+			nextWanderCalc = -1;
+			final Vector2 noAbsDistance = playerCenter.subtract(enemyCenter);
 			if(distanceVector.x > distanceVector.y)
 			{
-				if(distanceVector.x > 0)
+				if(noAbsDistance.x > 0)
 					direction = Direction.EAST;
 				else
 					direction = Direction.WEST;
 			} else
 			{
-				if(distanceVector.y > 0)
+				if(noAbsDistance.y > 0)
 					direction = Direction.SOUTH;
 				else
 					direction = Direction.NORTH;
 			}
 		}
+		
+		return detected;
 	}
 	
-	public void hit(Vector2 velocity)
+	public void hit(Vector2 normal, int damage)
 	{
-		hitbackVelocity.x = velocity.x;
-		hitbackVelocity.y = velocity.y;
+		hitbackVelocity.x = normal.x*20;
+		hitbackVelocity.y = normal.y*20;
 		lastHitTime = System.currentTimeMillis();
+		
+		health -= ((double)damage)/maxHealth;
+		if(health <= 0)
+			entity.getMap().getEntityList().removeEntityFromList(entity);
+	}
+	
+	public double getHealth()
+	{
+		return health;
+	}
+	
+	public void setHealth(double health)
+	{
+		this.health = health;
 	}
 	
 	private Animation updateTargetAnim()

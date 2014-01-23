@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <r2dxml>
-    <type id="10" name="mummy.entity.xml">
+    <type id="10" name="Prefab">
         <type id="11" name="dim">
             <x>96.0</x>
             <y>96.0</y>
@@ -8,23 +8,24 @@
         <type id="3" name="componentCount">1</type>
         <type id="5" name="rotation">0.0</type>
         <type id="8" name="name"/>
-        <type id="8" name="uuid">52aaa292-4332-44a7-9e5f-5ebd7d53440f</type>
+        <type id="8" name="uuid">08976e2e-1ac3-48df-b769-3c045689014a</type>
         <type id="10" name="component_0">
             <type id="11" name="hitboxPos">
                 <x>14.0</x>
                 <y>14.0</y>
             </type>
             <type id="8" name="eastAnimation">res\anim\enemy\mummy_east.anim.xml</type>
-            <type id="3" name="detectionDistance">10</type>
+            <type id="3" name="detectionDistance">300</type>
             <type id="11" name="hitboxDim">
                 <x>68.0</x>
                 <y>68.0</y>
             </type>
             <type id="8" name="southAnimation">res\anim\enemy\mummy_south.anim.xml</type>
+            <type id="6" name="maxHealth">100.0</type>
             <type id="8" name="className">Enemy</type>
             <type id="8" name="uuid">676d5685-5c34-4557-9207-c7496cec02c9</type>
             <type id="8" name="northAnimation">res\anim\enemy\mummy_north.anim.xml</type>
-            <type id="5" name="walkSpeed">10.0</type>
+            <type id="5" name="walkSpeed">5.0</type>
         </type>
         <type id="10" name="material">
             <type id="11" name="uvDim">
@@ -39,7 +40,7 @@
             </type>
             <type id="9" name="Repeat">false</type>
             <type id="9" name="Linear_Scaling">false</type>
-            <type id="3" name="Color">-65536</type>
+            <type id="3" name="Color">-1</type>
             <type id="1" name="RenderType">2</type>
         </type>
         <type id="11" name="pos">
