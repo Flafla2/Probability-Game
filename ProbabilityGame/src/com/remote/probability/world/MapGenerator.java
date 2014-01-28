@@ -12,6 +12,8 @@ public abstract class MapGenerator {
 	public static int DEFAULT_TILE_SIZE = 64;
 	public static final String PLAYER = "res/entity/player/lord_lard.entity.xml";
 	
+	public static final int MONSTER_SPAWN_PROBABILITY = 50;
+	
 	public abstract Map generateTiledMap(int width, int height, long seed, ProgressMeter progress);
 	
 	public static Map createMapFromTiles(byte[][] tiles, int px, int py, Random random, ProgressMeter progress)
@@ -69,13 +71,17 @@ public abstract class MapGenerator {
 						if(top || bot || lef || rig)
 							continue;
 												
-						int rand = random.nextInt(50);
+						int rand = random.nextInt((int) (MONSTER_SPAWN_PROBABILITY/GameStatistics.finalDifficultyModifier));
 						if(rand == 0)
 						{
 							Entity e = map.getEntityList().instantiatePrefab("res/entity/enemy/mummy.entity.xml");
 							ComponentEnemy comp = e.getComponentsOfType(ComponentEnemy.class).get(0);
 							e.pos = new Vector2(x*tileWidth-comp.hitboxPos.x,y*tileWidth-comp.hitboxPos.y);
 							comp.player = player;
+							comp.maxHealth *= GameStatistics.finalDifficultyModifier;
+							comp.damage *= GameStatistics.finalDifficultyModifier;
+							comp.detectionDistance *= GameStatistics.finalDifficultyModifier;
+							//comp.walkSpeed *= GameStatistics.finalDifficultyModifier;
 						}
 					}
 				}

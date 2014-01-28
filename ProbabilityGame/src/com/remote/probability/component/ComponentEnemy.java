@@ -7,7 +7,6 @@ import com.remote.probability.component.ComponentPlayer.Direction;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.Tile;
 import com.remote.remote2d.engine.art.Animation;
-import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.EntityList;
@@ -66,8 +65,8 @@ public class ComponentEnemy extends Component {
 			Renderer.drawRect(pos, new Vector2((float)health*100,10), 0xff0000, 1);
 		}
 		
-		if(detected)
-			Fonts.get("Arial").drawString("!", entity.pos.x+entity.dim.x/2, entity.pos.y-20, 20, 0x00ff00);
+//		if(detected)
+//			Fonts.get("Arial").drawString("!", entity.pos.x+entity.dim.x/2, entity.pos.y-20, 20, 0x00ff00);
 	}
 
 	@Override
@@ -127,7 +126,8 @@ public class ComponentEnemy extends Component {
 			if(Collider.collides(playerHitbox,enemyHitbox))
 			{
 				comp.hit(velocity.normalize(), canAttack ? damage : 0);
-				lastAttackTime = System.currentTimeMillis();
+				if(canAttack)
+					lastAttackTime = System.currentTimeMillis();
 			}
 		}
 		
@@ -232,7 +232,24 @@ public class ComponentEnemy extends Component {
 			explosion.pos.y = entity.pos.y+entity.dim.y-explosion.dim.y;
 			
 			entity.getMap().getEntityList().removeEntityFromList(entity);
+			
+			if(!isOtherEnemyInMap())
+				GameStatistics.finished = true;
 		}
+	}
+	
+	private boolean isOtherEnemyInMap()
+	{
+		for(int x=0;x<entity.getMap().getEntityList().size();x++)
+		{
+			Entity e = entity.getMap().getEntityList().get(x);
+			if(e.getUUID().equals(entity.getUUID()))
+				continue;
+			
+			if(e.getComponentsOfType(ComponentEnemy.class).size() > 0)
+				return true;
+		}
+		return false;
 	}
 	
 	public double getHealth()

@@ -41,7 +41,7 @@ public class GuiMainMenu extends GuiMenu{
 		buttonList.clear();
 		buttonList.add(new GuiButton(0,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Play Game"));
 		buttonY += 50;
-		buttonList.add(new GuiButton(1,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Open Editor (Buggy as all hell!)"));
+		buttonList.add(new GuiButton(1,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Open Editor"));
 		buttonY += 50;
 		buttonList.add(new GuiButton(2,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Quit Game"));
 		
