@@ -23,6 +23,7 @@ public class ComponentEnemy extends Component {
 	public double maxHealth = 100;
 	public int attackFrequency = 500;
 	public int damage = 5;
+	public int money = 10;
 	
 	public Animation northAnimation;
 	public Animation southAnimation;
@@ -231,6 +232,7 @@ public class ComponentEnemy extends Component {
 			explosion.pos.x = entity.pos.x+entity.dim.x/2-explosion.dim.x/2;
 			explosion.pos.y = entity.pos.y+entity.dim.y-explosion.dim.y;
 			
+			explodeMoney(money);
 			entity.getMap().getEntityList().removeEntityFromList(entity);
 			
 			if(!isOtherEnemyInMap())
@@ -260,6 +262,46 @@ public class ComponentEnemy extends Component {
 	public void setHealth(double health)
 	{
 		this.health = health;
+	}
+	
+	public void explodeMoney(int amount)
+	{
+		while(amount > 50)
+		{
+			amount -= 50;
+			spawnCoinRandomDirection("res/entity/collectibles/coin_diamond.entity.xml");
+		}
+		
+		while(amount > 10)
+		{
+			amount -= 10;
+			spawnCoinRandomDirection("res/entity/collectibles/coin_gold.entity.xml");
+		}
+		
+		while(amount > 5)
+		{
+			amount -= 5;
+			spawnCoinRandomDirection("res/entity/collectibles/coin_silver.entity.xml");
+		}
+		
+		while(amount > 1)
+		{
+			amount--;
+			spawnCoinRandomDirection("res/entity/collectibles/coin_bronze.entity.xml");
+		}
+	}
+	
+	public void spawnCoinRandomDirection(String prefab)
+	{
+		Entity e = entity.getMap().getEntityList().instantiatePrefab(prefab,entity.getMap().getEntityList().indexOf(entity));
+		e.pos = new Vector2(entity.pos.x+entity.dim.x/2-e.dim.x/2,entity.pos.y+entity.dim.y/2-e.dim.y/2);
+		final int flySpeed = 30;
+		final double angle = Game.random.nextDouble()*360;
+		float x = (float) (flySpeed*Math.sin(angle));
+		float y = (float) (flySpeed*Math.cos(angle));
+		ComponentCoin comp = e.getComponentsOfType(ComponentCoin.class).get(0);
+		comp.initialVelocity = new Vector2(x,y);
+		comp.player = player;
 	}
 	
 	private Animation updateTargetAnim()

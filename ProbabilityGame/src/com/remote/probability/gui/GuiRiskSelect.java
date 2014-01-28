@@ -61,6 +61,7 @@ public class GuiRiskSelect extends GuiMenu {
 		} else if(button.id == 1)
 		{
 			GameStatistics.setFinalDifficultyModifier(GameStatistics.wave, (int)(slider.progress*100));
+			GameStatistics.riskFactor = (int)(slider.progress*100);
 			Remote2D.guiList.pop();
 			MapGenerator gen = new MapGeneratorSimple();
 			Remote2D.guiList.push(new GuiLoadMap(gen, 40, 40, 1337));

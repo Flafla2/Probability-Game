@@ -8,6 +8,7 @@ public class GameStatistics {
 	public static int tileSize;
 	
 	public static double playerHealth = 1.0;
+	public static double playerMoney = 0;
 	public static boolean finished = false;
 	
 	public static int wave = 0;
@@ -19,6 +20,7 @@ public class GameStatistics {
 	public static int bombNum = 0;
 	
 	public static double finalDifficultyModifier = 1;
+	public static int riskFactor = 0;
 	
 	public static float getMoneyMultiplier(int wave, int riskFactor)
 	{

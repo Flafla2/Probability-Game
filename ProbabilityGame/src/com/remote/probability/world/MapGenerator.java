@@ -74,7 +74,14 @@ public abstract class MapGenerator {
 						int rand = random.nextInt((int) (MONSTER_SPAWN_PROBABILITY/GameStatistics.finalDifficultyModifier));
 						if(rand == 0)
 						{
-							Entity e = map.getEntityList().instantiatePrefab("res/entity/enemy/mummy.entity.xml");
+							int enemyType = random.nextInt(3);
+							Entity e;
+							if(enemyType == 0)
+								e = map.getEntityList().instantiatePrefab("res/entity/enemy/mummy.entity.xml");
+							else if(enemyType == 1)
+								e = map.getEntityList().instantiatePrefab("res/entity/enemy/bat.entity.xml");
+							else //if(enemyType == 2)
+								e = map.getEntityList().instantiatePrefab("res/entity/enemy/scarab.entity.xml");
 							ComponentEnemy comp = e.getComponentsOfType(ComponentEnemy.class).get(0);
 							e.pos = new Vector2(x*tileWidth-comp.hitboxPos.x,y*tileWidth-comp.hitboxPos.y);
 							comp.player = player;

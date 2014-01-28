@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.esotericsoftware.minlog.Log;
 import com.remote.probability.component.ComponentBullet;
+import com.remote.probability.component.ComponentCoin;
 import com.remote.probability.component.ComponentEnemy;
 import com.remote.probability.component.ComponentExplosion;
 import com.remote.probability.component.ComponentPlayer;
@@ -41,6 +42,7 @@ public class Game extends Remote2DGame {
 		InsertableComponentList.addInsertableComponent("Enemy", ComponentEnemy.class);
 		InsertableComponentList.addInsertableComponent("Bullet", ComponentBullet.class);
 		InsertableComponentList.addInsertableComponent("Explosion", ComponentExplosion.class);
+		InsertableComponentList.addInsertableComponent("Coin", ComponentCoin.class);
 		
 		Remote2D.guiList.push(new GuiMainMenu());
 	}

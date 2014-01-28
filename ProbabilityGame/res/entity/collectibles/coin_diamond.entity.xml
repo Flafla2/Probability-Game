@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<r2dxml>
+    <type id="10" name="coin_diamond.entity.xml">
+        <type id="11" name="dim">
+            <x>48.0</x>
+            <y>48.0</y>
+        </type>
+        <type id="3" name="componentCount">1</type>
+        <type id="5" name="rotation">0.0</type>
+        <type id="8" name="name"/>
+        <type id="8" name="uuid">8e30bfa1-ac86-47d3-84d0-63d09246bade</type>
+        <type id="10" name="component_0">
+            <type id="3" name="attractDistance">100</type>
+            <type id="3" name="maxAttractSpeed">10</type>
+            <type id="8" name="className">Coin</type>
+            <type id="3" name="baseValue">50</type>
+            <type id="8" name="uuid">9c164881-92a1-4e2e-8864-09327968f920</type>
+        </type>
+        <type id="10" name="material">
+            <type id="11" name="uvDim">
+                <x>1.0</x>
+                <y>1.0</y>
+            </type>
+            <type id="5" name="Alpha">1.0</type>
+            <type id="8" name="Animation">res/anim/collectibles/coin_diamond.anim.xml</type>
+            <type id="11" name="uvPos">
+                <x>0.0</x>
+                <y>0.0</y>
+            </type>
+            <type id="9" name="Repeat">false</type>
+            <type id="9" name="Linear_Scaling">false</type>
+            <type id="3" name="Color">-1</type>
+            <type id="1" name="RenderType">2</type>
+        </type>
+        <type id="11" name="pos">
+            <x>97.0</x>
+            <y>115.0</y>
+        </type>
+    </type>
+</r2dxml>
