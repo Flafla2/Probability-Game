@@ -153,21 +153,21 @@ public class ComponentPlayer extends Component {
 		switch(direction)
 		{
 		case SOUTH:
-			return new Vector2(centerBullet.x,hitboxDim.y).add(hitboxPos);
+			return new Vector2(centerBullet.x+6,hitboxDim.y-12).add(hitboxPos);
 		case NORTH:
-			return new Vector2(centerBullet.x,0).add(hitboxPos);
+			return new Vector2(centerBullet.x-2,-18).add(hitboxPos);
 		case EAST:
-			return new Vector2(hitboxDim.x,centerBullet.y).add(hitboxPos);
+			return new Vector2(hitboxDim.x,centerBullet.y+10).add(hitboxPos);
 		case WEST:
-			return new Vector2(0,centerBullet.y).add(hitboxPos);
+			return new Vector2(-bulletDim.x,centerBullet.y+10).add(hitboxPos);
 		case SOUTHEAST:
-			return new Vector2(hitboxDim.x,hitboxDim.y).add(hitboxPos);
+			return new Vector2(hitboxDim.x-10,hitboxDim.y-16).add(hitboxPos);
 		case SOUTHWEST:
-			return new Vector2(-bulletDim.x,hitboxDim.y).add(hitboxPos);
+			return new Vector2(-bulletDim.x+10,hitboxDim.y-16).add(hitboxPos);
 		case NORTHEAST:
-			return new Vector2(hitboxDim.x,-bulletDim.y).add(hitboxPos);
+			return new Vector2(hitboxDim.x-4,-bulletDim.y+38).add(hitboxPos);
 		case NORTHWEST:
-			return new Vector2(-bulletDim.x,-bulletDim.y).add(hitboxPos);
+			return new Vector2(-bulletDim.x+4,-bulletDim.y+38).add(hitboxPos);
 		default:
 			return centerBullet;
 		}

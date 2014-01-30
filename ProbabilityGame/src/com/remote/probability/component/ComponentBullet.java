@@ -16,8 +16,9 @@ public class ComponentBullet extends Component {
 	private static final float BULLET_SPEED_DIAG = (float) (BULLET_SPEED*Game.ONE_OVER_SQRT2);
 	private static final long DESPAWN_TIME = 5000;
 	
-	private Direction direction = Direction.NORTH;
+	private Direction direction = Direction.NORTHEAST;
 	private long despawnTimer = -1;
+	private boolean corrected = false;
 
 	@Override
 	public void init() {
@@ -79,20 +80,27 @@ public class ComponentBullet extends Component {
 		
 		entity.pos = entity.pos.add(movement);
 		
-		//TODO: Work out/optimize slow collision
 		boolean hits = entity.getMap().collidesWithMap(getCollider());
-		
-		if((despawnTimer != -1 && System.currentTimeMillis()-despawnTimer >= DESPAWN_TIME) || hits)
+		if(hits)
 		{
-			entity.getMap().getEntityList().removeEntityFromList(entity);
+			Vector2 correction = entity.getMap().getCorrection(getCollider());
+			if(corrected)
+			{
+				entity.getMap().getEntityList().removeEntityFromList(entity);
+				return;
+			}
+			entity.pos = entity.pos.add(correction);
+			if(!correction.equals(new Vector2(0)))
+				corrected = true;
 		}
+				
+		if((despawnTimer != -1 && System.currentTimeMillis()-despawnTimer >= DESPAWN_TIME))
+			entity.getMap().getEntityList().removeEntityFromList(entity);
 		
 		ColliderBox collider = getCollider();
 		for(int x = 0;x<entity.getMap().getEntityList().size();x++)
 		{
 			Entity e = entity.getMap().getEntityList().get(x);
-			//Vector2 distance = e.pos.subtract(entity.pos).abs();
-			//int distSquared = (int) (distance.x*distance.x+distance.y*distance.y);
 			
 			ArrayList<ComponentEnemy> comps = e.getComponentsOfType(ComponentEnemy.class);
 			for(ComponentEnemy comp : comps)
@@ -110,26 +118,49 @@ public class ComponentBullet extends Component {
 	private ColliderBox getCollider()
 	{
 		Vector2 cPos = new Vector2(0,0);
+		Vector2 offset = new Vector2(0,0);
 		
 		switch(direction)
 		{
 		case NORTH:
 		case SOUTH:
-			cPos.x = 4;
+			cPos.x = 12;
+			cPos.y = 2;
 			break;
 		case EAST:
 		case WEST:
-			cPos.y = 4;
-			break;
-		default:
+			cPos.y = 12;
 			cPos.x = 2;
-			cPos.y = 2;
+			break;
+		case NORTHEAST:
+			offset.x = 6;
+			offset.y = -6;
+			cPos.x = 10;
+			cPos.y = 10;
+			break;
+		case SOUTHEAST:
+			offset.x = 6;
+			offset.y = 6;
+			cPos.x = 10;
+			cPos.y = 10;
+			break;
+		case NORTHWEST:
+			offset.x = -6;
+			offset.y = -6;
+			cPos.x = 10;
+			cPos.y = 10;
+			break;
+		case SOUTHWEST:
+			offset.x = -6;
+			offset.y = 6;
+			cPos.x = 10;
+			cPos.y = 10;
 			break;
 		}
 		
 		Vector2 cDim = entity.dim.subtract(cPos.multiply(new Vector2(2)));
 		
-		return cPos.add(entity.pos).getColliderWithDim(cDim);
+		return cPos.add(entity.pos).add(offset).getColliderWithDim(cDim);
 	}
 
 	@Override

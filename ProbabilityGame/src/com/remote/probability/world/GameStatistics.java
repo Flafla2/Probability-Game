@@ -24,7 +24,7 @@ public class GameStatistics {
 	
 	public static float getMoneyMultiplier(int wave, int riskFactor)
 	{
-		return 1+0.9f*wave+((float)riskFactor-50)/4f;
+		return 1+wave/5+riskFactor/25;
 	}
 	
 	public static int getTrueRiskVariable(int wave, int riskFactor)

@@ -232,7 +232,7 @@ public class ComponentEnemy extends Component {
 			explosion.pos.x = entity.pos.x+entity.dim.x/2-explosion.dim.x/2;
 			explosion.pos.y = entity.pos.y+entity.dim.y-explosion.dim.y;
 			
-			explodeMoney(money);
+			explodeMoney(Math.round(money*GameStatistics.getMoneyMultiplier(GameStatistics.wave, GameStatistics.riskFactor)));
 			entity.getMap().getEntityList().removeEntityFromList(entity);
 			
 			if(!isOtherEnemyInMap())

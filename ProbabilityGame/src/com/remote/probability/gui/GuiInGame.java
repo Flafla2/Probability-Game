@@ -46,6 +46,8 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		Fonts.get("Jungle").drawString("Health:", 7, 7, 20, 0x777777);
 		Fonts.get("Jungle").drawString("Health:", 10, 10, 20, 0xffffff);
 		Fonts.get("Jungle").drawString("Difficulty: "+(GameStatistics.finalDifficultyModifier*100), 10, 30, 20, 0xffffff);
+		Fonts.get("Jungle").drawString("Coins: "+GameStatistics.playerMoney, 10, 50, 20, 0xffffff);
+		
 		
 		if(HEALTH_POS == -1)
 			HEALTH_POS = Fonts.get("Jungle").getStringDim("Health:", 20)[0]+10;
@@ -91,6 +93,9 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 				Remote2D.guiList.push(new GuiRiskSelect(this));
 			}
 		}
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_H))
+			GameStatistics.playerHealth = 1;
 	}
 	
 	public static interface DebugModule
