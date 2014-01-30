@@ -38,7 +38,7 @@ public class GuiDead extends GuiMenu {
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2(screenWidth()/2-150, screenHeight()-80),new Vector2(300,40),"Back to Main Menu"));
+		buttonList.add(new GuiButtonStyled(0,new Vector2(screenWidth()/2-150, screenHeight()-80),new Vector2(300,40),"Back to Main Menu"));
 	}
 	
 	@Override

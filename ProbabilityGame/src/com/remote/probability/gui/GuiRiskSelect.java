@@ -29,8 +29,8 @@ public class GuiRiskSelect extends GuiMenu {
 			slider.dim = new Vector2(screenWidth()-200,96);
 		
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2(screenWidth()/2-200,screenHeight()-50),new Vector2(200,40),"Quit"));
-		buttonList.add(new GuiButton(1,new Vector2(screenWidth()/2,screenHeight()-50),new Vector2(200,40),"Continue to wave "+(GameStatistics.wave+1)));
+		buttonList.add(new GuiButtonStyled(0,new Vector2(screenWidth()/2-200,screenHeight()-50),new Vector2(200,40),"Quit"));
+		buttonList.add(new GuiButtonStyled(1,new Vector2(screenWidth()/2,screenHeight()-50),new Vector2(200,40),"Continue to wave "+(GameStatistics.wave+1)));
 	}
 	
 	@Override

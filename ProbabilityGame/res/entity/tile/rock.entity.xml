@@ -5,10 +5,14 @@
             <x>64.0</x>
             <y>112.0</y>
         </type>
-        <type id="3" name="componentCount">1</type>
+        <type id="3" name="componentCount">2</type>
         <type id="5" name="rotation">0.0</type>
         <type id="8" name="name"/>
-        <type id="8" name="uuid">2b9e9632-e2d8-4d18-891c-4407ec1c7fda</type>
+        <type id="8" name="uuid">d713ea2b-a864-4da6-8346-cae5ee8ae726</type>
+        <type id="10" name="component_1">
+            <type id="8" name="className">Tile</type>
+            <type id="8" name="uuid">f89121c2-8d7b-4a92-8b6e-3fa35b4b1418</type>
+        </type>
         <type id="10" name="component_0">
             <type id="11" name="dim">
                 <x>64.0</x>
@@ -33,12 +37,12 @@
             </type>
             <type id="9" name="Repeat">false</type>
             <type id="9" name="Linear_Scaling">false</type>
-            <type id="8" name="Texture">./res/art/tile/walls.png</type>
+            <type id="8" name="Texture">.\res\art\tile\walls.png</type>
             <type id="3" name="Color">-1</type>
             <type id="1" name="RenderType">1</type>
         </type>
         <type id="11" name="pos">
-            <x>0.0</x>
+            <x>64.0</x>
             <y>0.0</y>
         </type>
     </type>

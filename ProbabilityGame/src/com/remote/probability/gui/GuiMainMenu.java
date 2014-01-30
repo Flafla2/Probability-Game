@@ -1,7 +1,6 @@
 package com.remote.probability.gui;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 
 import com.remote.probability.world.MapGenerator;
 import com.remote.probability.world.MapGeneratorSimple;
@@ -9,7 +8,9 @@ import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.StretchType;
 import com.remote.remote2d.engine.art.Fonts;
-import com.remote.remote2d.engine.gui.Gui;
+import com.remote.remote2d.engine.art.Renderer;
+import com.remote.remote2d.engine.art.ResourceLoader;
+import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.gui.GuiButton;
 import com.remote.remote2d.engine.gui.GuiMenu;
 import com.remote.remote2d.engine.io.R2DFileUtility;
@@ -27,6 +28,7 @@ public class GuiMainMenu extends GuiMenu{
 	public GuiMainMenu()
 	{
 		super();
+		backgroundColor = 0x2c1e23;
 	}
 	
 	@Override
@@ -34,16 +36,16 @@ public class GuiMainMenu extends GuiMenu{
 	{
 		final int buttonWidth = 500;
 		final int buttonHeight = 40;
-		final int buttonx = screenWidth()-buttonWidth;
+		final int buttonx = screenWidth()/2-buttonWidth/2;
 		final int numButtons = 3;
 		int buttonY = screenHeight()/2-(buttonHeight*numButtons+10*(numButtons-1))/2;
 		
 		buttonList.clear();
-		buttonList.add(new GuiButton(0,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Play Game"));
-		buttonY += 50;
-		buttonList.add(new GuiButton(1,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Open Editor"));
-		buttonY += 50;
-		buttonList.add(new GuiButton(2,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Quit Game"));
+		buttonList.add(new GuiButtonStyled(0,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Play Game"));
+		buttonY += 100;
+		buttonList.add(new GuiButtonStyled(1,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Open Editor"));
+		buttonY += 100;
+		buttonList.add(new GuiButtonStyled(2,new Vector2(buttonx,buttonY),new Vector2(buttonWidth,buttonHeight),"Quit Game"));
 		
 		if(debug)
 		{
@@ -56,20 +58,16 @@ public class GuiMainMenu extends GuiMenu{
 	{
 		super.renderBackground(interpolation);
 		
-		//EXTREMELY MESSY CODE for the gradient
-		float[] top = Gui.getRGB(GRADIENT_TOP);
-		float[] bot = Gui.getRGB(GRADIENT_BOTTOM);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glBegin(GL11.GL_QUADS);
-			GL11.glColor4f(top[0],top[1],top[2],1);
-			GL11.glVertex2f(0, 0);
-			GL11.glVertex2f(screenWidth(), 0);
-			GL11.glColor4f(bot[0],bot[1],bot[2],1);
-			GL11.glVertex2f(screenWidth(), screenHeight());
-			GL11.glVertex2f(0, screenHeight());
-			GL11.glColor4f(1,1,1,1);
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		Texture tex = ResourceLoader.getTexture("res/gui/title_screen.png");
+		Vector2 dim = new Vector2(tex.getImage().getWidth(),tex.getImage().getHeight());
+		float ratio = ((float)screenWidth())/dim.x;
+		dim.x *= ratio;
+		dim.y *= ratio;
+		
+		if(dim.y >= screenHeight())
+			Renderer.drawRect(new Vector2(0, -dim.y+screenHeight()), dim, tex, 0xffffff, 1);
+		else
+			Renderer.drawRect(new Vector2(0), dim, tex, 0xffffff, 1);
 	}
 	
 	@Override
@@ -77,10 +75,10 @@ public class GuiMainMenu extends GuiMenu{
 	{
 		super.render(interpolation);
 		
-		Fonts.get("Jungle").drawString("THE RISK FACTOR", 10, screenHeight()/2-50, 100, 0x000000);
+		Fonts.get("Jungle").drawCenteredString("THE RISK FACTOR", 20, 100, 0xffffff);
 		
 		if(System.currentTimeMillis()-lastMessageTime < 8000)
-			Fonts.get("Arial").drawCenteredString(message, 200, 30, 0x000000);
+			Fonts.get("Arial").drawCenteredString(message, 200, 30, 0xffffff);
 	}
 	
 	@Override
