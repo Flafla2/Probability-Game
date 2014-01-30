@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<r2dxml>
+    <type id="10" name="shine_small.entity.xml">
+        <type id="11" name="dim">
+            <x>26.0</x>
+            <y>26.0</y>
+        </type>
+        <type id="3" name="componentCount">0</type>
+        <type id="5" name="rotation">0.0</type>
+        <type id="8" name="name"/>
+        <type id="8" name="uuid">5f95d215-166a-4e73-9e7f-86e8727cb497</type>
+        <type id="10" name="material">
+            <type id="11" name="uvDim">
+                <x>1.0</x>
+                <y>1.0</y>
+            </type>
+            <type id="5" name="Alpha">1.0</type>
+            <type id="8" name="Animation">res/anim/effects/shine_small.anim.xml</type>
+            <type id="11" name="uvPos">
+                <x>0.0</x>
+                <y>0.0</y>
+            </type>
+            <type id="9" name="Repeat">false</type>
+            <type id="9" name="Linear_Scaling">false</type>
+            <type id="3" name="Color">-1</type>
+            <type id="1" name="RenderType">2</type>
+        </type>
+        <type id="11" name="pos">
+            <x>0.0</x>
+            <y>0.0</y>
+        </type>
+    </type>
+</r2dxml>

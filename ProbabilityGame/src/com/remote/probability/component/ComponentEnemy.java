@@ -6,6 +6,7 @@ import com.remote.probability.Game;
 import com.remote.probability.component.ComponentPlayer.Direction;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.Tile;
+import com.remote.remote2d.engine.AudioHandler;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.entity.Entity;
@@ -126,9 +127,12 @@ public class ComponentEnemy extends Component {
 			ColliderBox enemyHitbox = entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim);
 			if(Collider.collides(playerHitbox,enemyHitbox))
 			{
-				comp.hit(velocity.normalize(), canAttack ? damage : 0);
+				comp.hit(velocity.normalize(), walkSpeed, canAttack ? damage : 0);
 				if(canAttack)
+				{
+					AudioHandler.playSound("res/sound/fx/player/hit"+(Game.random.nextInt(3)+1)+".wav", false, false);
 					lastAttackTime = System.currentTimeMillis();
+				}
 			}
 		}
 		
@@ -235,6 +239,7 @@ public class ComponentEnemy extends Component {
 			explodeMoney(Math.round(money*GameStatistics.getMoneyMultiplier(GameStatistics.wave, GameStatistics.riskFactor)));
 			entity.getMap().getEntityList().removeEntityFromList(entity);
 			
+			AudioHandler.playSound("res/sound/fx/enemy/death_explosion_"+Game.random.nextInt(2)+".wav", entity.pos.add(entity.dim.divide(new Vector2(2))), false, false);
 			if(!isOtherEnemyInMap())
 				GameStatistics.finished = true;
 		}

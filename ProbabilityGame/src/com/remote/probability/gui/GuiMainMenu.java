@@ -2,6 +2,8 @@ package com.remote.probability.gui;
 
 import org.lwjgl.input.Keyboard;
 
+import com.remote.probability.AudioSwitcher;
+import com.remote.probability.AudioSwitcher.SoundMode;
 import com.remote.probability.world.MapGenerator;
 import com.remote.probability.world.MapGeneratorSimple;
 import com.remote.remote2d.editor.GuiEditor;
@@ -34,6 +36,9 @@ public class GuiMainMenu extends GuiMenu{
 	@Override
 	public void initGui()
 	{
+		if(AudioSwitcher.getSoundMode() != SoundMode.TITLE)
+			AudioSwitcher.setSoundMode(SoundMode.TITLE);
+		
 		final int buttonWidth = 500;
 		final int buttonHeight = 40;
 		final int buttonx = screenWidth()/2-buttonWidth/2;

@@ -8,6 +8,7 @@ import org.lwjgl.input.Mouse;
 import com.remote.probability.Game;
 import com.remote.probability.gui.GuiDead;
 import com.remote.probability.world.GameStatistics;
+import com.remote.remote2d.engine.AudioHandler;
 import com.remote.remote2d.engine.DisplayHandler;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Animation;
@@ -140,9 +141,13 @@ public class ComponentPlayer extends Component {
 				ComponentBullet comp = bullet.getComponentsOfType(ComponentBullet.class).get(0);
 				comp.setDirection(direction);
 				bulletTimer = System.currentTimeMillis();
+				String sound = AudioHandler.playSound("res/sound/fx/player/shoot"+(Game.random.nextInt(5)+1)+".wav", false, false);
+				AudioHandler.setVolume(sound, 0.5f);
 			}
 		} else
 			bulletTimer = 0;
+		
+		AudioHandler.setListenerPos(entity.pos.add(entity.dim.divide(new Vector2(2))));
 	}
 	
 	private Vector2 getBulletSpawnPosLocal(Vector2 bulletDim)
@@ -219,14 +224,15 @@ public class ComponentPlayer extends Component {
 		return target;
 	}
 	
-	public void hit(Vector2 normal, int damage)
+	public void hit(Vector2 normal, float velocity, int damage)
 	{
-		hitbackVelocity.x = normal.x*20;
-		hitbackVelocity.y = normal.y*20;
+		hitbackVelocity.x = normal.x*30;
+		hitbackVelocity.y = normal.y*30;
 		if(damage != 0)
 			lastHitTime = System.currentTimeMillis();
 		
 		GameStatistics.playerHealth -= ((double)damage)/maxHealth;
+		
 		if(GameStatistics.playerHealth <= 0)
 		{
 			Remote2D.guiList.pop();

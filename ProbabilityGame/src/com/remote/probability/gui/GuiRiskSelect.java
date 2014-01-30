@@ -36,7 +36,7 @@ public class GuiRiskSelect extends GuiMenu {
 	@Override
 	public void renderBackground(float interpolation)
 	{
-		below.render(interpolation);
+		below.render(0);
 		Renderer.drawRect(new Vector2(0), DisplayHandler.getDimensions(), 0x000000, 0.5f);
 		
 		Fonts.get("Jungle").drawCenteredString("CHOOSE YOUR RISK FACTOR", 20, 50, 0xffffff);

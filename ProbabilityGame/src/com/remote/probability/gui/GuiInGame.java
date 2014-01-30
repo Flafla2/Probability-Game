@@ -5,7 +5,9 @@ import java.awt.Color;
 import org.lwjgl.input.Keyboard;
 
 import com.esotericsoftware.minlog.Log;
+import com.remote.probability.AudioSwitcher;
 import com.remote.probability.Game;
+import com.remote.probability.AudioSwitcher.SoundMode;
 import com.remote.probability.world.GameStatistics;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;
@@ -30,6 +32,14 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		GameStatistics.finished = false;
 		prevColor = new Color(Game.random.nextInt(0xffffff));
 		nextColor = new Color(Game.random.nextInt(0xffffff));
+	}
+	
+	@Override
+	public void initGui()
+	{
+		super.initGui();
+		if(AudioSwitcher.getSoundMode() != SoundMode.INGAME)
+			AudioSwitcher.setSoundMode(SoundMode.INGAME);
 	}
 	
 	@Override
@@ -67,6 +77,11 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 			
 			double interp = 1-(double)(nextColorChange-time)/500d;
 			float[] fcolors = Interpolator.linearInterpolate(prevColor.getRGBComponents(null), nextColor.getRGBComponents(null), interp);
+			for(int x=0;x<fcolors.length;x++)
+			{
+				fcolors[x] = Math.max(0, fcolors[x]);
+				fcolors[x] = Math.min(1, fcolors[x]);
+			}
 			Color c = new Color(fcolors[0],fcolors[1],fcolors[2]);
 			int color = c.getRGB();
 			
@@ -96,6 +111,8 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_H))
 			GameStatistics.playerHealth = 1;
+		
+		AudioSwitcher.tick();
 	}
 	
 	public static interface DebugModule

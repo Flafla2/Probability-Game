@@ -1,7 +1,9 @@
 package com.remote.probability.component;
 
+import com.remote.probability.Game;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.Tile;
+import com.remote.remote2d.engine.AudioHandler;
 import com.remote.remote2d.engine.art.Renderer;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
@@ -61,6 +63,11 @@ public class ComponentCoin extends Component {
 			{
 				entity.getMap().getEntityList().removeEntityFromList(entity);
 				GameStatistics.playerMoney += baseValue;//*GameStatistics.getMoneyMultiplier(GameStatistics.wave, GameStatistics.riskFactor);
+				if(baseValue < 10)
+					AudioHandler.playSound("res/sound/fx/coin/Small Coin.wav", false, false);
+				else
+					AudioHandler.playSound("res/sound/fx/coin/coin"+(Game.random.nextInt(5)+1)+".wav", false, false);
+				
 			}
 		}
 		

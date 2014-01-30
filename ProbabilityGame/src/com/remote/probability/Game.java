@@ -10,6 +10,7 @@ import com.remote.probability.component.ComponentExplosion;
 import com.remote.probability.component.ComponentPlayer;
 import com.remote.probability.component.ComponentTile;
 import com.remote.probability.gui.GuiInGame;
+import com.remote.probability.gui.GuiLoadGame;
 import com.remote.probability.gui.GuiMainMenu;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.Remote2DGame;
@@ -46,7 +47,7 @@ public class Game extends Remote2DGame {
 		InsertableComponentList.addInsertableComponent("Coin", ComponentCoin.class);
 		InsertableComponentList.addInsertableComponent("Tile", ComponentTile.class);
 		
-		Remote2D.guiList.push(new GuiMainMenu());
+		Remote2D.guiList.push(new GuiLoadGame());
 	}
 	
 	@Override
