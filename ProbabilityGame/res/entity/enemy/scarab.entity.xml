@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <r2dxml>
-    <type id="10" name="Prefab">
+    <type id="10" name="scarab.entity.xml">
         <type id="11" name="dim">
             <x>96.0</x>
             <y>96.0</y>
@@ -8,7 +8,7 @@
         <type id="3" name="componentCount">1</type>
         <type id="5" name="rotation">0.0</type>
         <type id="8" name="name"/>
-        <type id="8" name="uuid">dc207bf7-7ec2-40e7-890e-b7595b031964</type>
+        <type id="8" name="uuid">590344fe-e621-4f5a-9dd8-8a8a2cae8d12</type>
         <type id="10" name="component_0">
             <type id="11" name="hitboxPos">
                 <x>14.0</x>
@@ -24,7 +24,7 @@
                 <y>68.0</y>
             </type>
             <type id="8" name="southAnimation">res/anim/enemy/scarab_south.anim.xml</type>
-            <type id="6" name="maxHealth">80.0</type>
+            <type id="6" name="maxHealth">40.0</type>
             <type id="8" name="className">Enemy</type>
             <type id="8" name="uuid">676d5685-5c34-4557-9207-c7496cec02c9</type>
             <type id="8" name="northAnimation">res/anim/enemy/scarab_north.anim.xml</type>
@@ -47,8 +47,8 @@
             <type id="1" name="RenderType">2</type>
         </type>
         <type id="11" name="pos">
-            <x>0.0</x>
-            <y>0.0</y>
+            <x>305.0</x>
+            <y>-127.0</y>
         </type>
     </type>
 </r2dxml>

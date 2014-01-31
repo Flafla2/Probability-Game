@@ -63,6 +63,7 @@ public class ComponentCoin extends Component {
 			{
 				entity.getMap().getEntityList().removeEntityFromList(entity);
 				GameStatistics.playerMoney += baseValue;//*GameStatistics.getMoneyMultiplier(GameStatistics.wave, GameStatistics.riskFactor);
+				GameStatistics.totalCoins += baseValue;
 				if(baseValue < 10)
 					AudioHandler.playSound("res/sound/fx/coin/Small Coin.wav", false, false);
 				else

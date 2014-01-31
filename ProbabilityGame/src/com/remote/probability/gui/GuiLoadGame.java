@@ -15,6 +15,12 @@ public class GuiLoadGame extends GuiMenu {
 	boolean started = false;
 	boolean finished = false;
 	
+	public GuiLoadGame()
+	{
+		super();
+		backgroundColor = 0x2c1e23;
+	}
+	
 	@Override
 	public void renderBackground(float interpolation)
 	{

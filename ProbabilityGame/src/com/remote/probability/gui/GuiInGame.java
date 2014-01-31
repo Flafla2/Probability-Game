@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import org.lwjgl.input.Keyboard;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.probability.AudioSwitcher;
 import com.remote.probability.Game;
 import com.remote.probability.AudioSwitcher.SoundMode;
@@ -12,7 +11,6 @@ import com.remote.probability.world.GameStatistics;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
-import com.remote.remote2d.engine.gui.Gui;
 import com.remote.remote2d.engine.logic.Interpolator;
 import com.remote.remote2d.engine.logic.Vector2;
 import com.remote.remote2d.engine.world.Map;
@@ -32,6 +30,8 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		GameStatistics.finished = false;
 		prevColor = new Color(Game.random.nextInt(0xffffff));
 		nextColor = new Color(Game.random.nextInt(0xffffff));
+		
+		backgroundColor = 0x000000;
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		
 		Fonts.get("Jungle").drawString("Health:", 7, 7, 20, 0x777777);
 		Fonts.get("Jungle").drawString("Health:", 10, 10, 20, 0xffffff);
-		Fonts.get("Jungle").drawString("Difficulty: "+(GameStatistics.finalDifficultyModifier*100), 10, 30, 20, 0xffffff);
+		Fonts.get("Jungle").drawString("Difficulty: "+(int)(GameStatistics.finalDifficultyModifier*100)+"%", 10, 30, 20, 0xffffff);
 		Fonts.get("Jungle").drawString("Coins: "+GameStatistics.playerMoney, 10, 50, 20, 0xffffff);
 		
 		

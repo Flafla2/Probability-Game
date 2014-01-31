@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <r2dxml>
-    <type id="10" name="Prefab">
+    <type id="10" name="bat.entity.xml">
         <type id="11" name="dim">
             <x>64.0</x>
             <y>64.0</y>
@@ -8,7 +8,7 @@
         <type id="3" name="componentCount">1</type>
         <type id="5" name="rotation">0.0</type>
         <type id="8" name="name"/>
-        <type id="8" name="uuid">bc31db83-3e7c-44e4-aaad-d33bb29f8bc6</type>
+        <type id="8" name="uuid">30066144-861f-4661-9736-20e94d02473e</type>
         <type id="10" name="component_0">
             <type id="11" name="hitboxPos">
                 <x>8.0</x>
@@ -24,7 +24,7 @@
                 <y>48.0</y>
             </type>
             <type id="8" name="southAnimation">res/anim/enemy/bat.anim.xml</type>
-            <type id="6" name="maxHealth">40.0</type>
+            <type id="6" name="maxHealth">20.0</type>
             <type id="8" name="className">Enemy</type>
             <type id="8" name="uuid">676d5685-5c34-4557-9207-c7496cec02c9</type>
             <type id="8" name="northAnimation">res/anim/enemy/bat.anim.xml</type>

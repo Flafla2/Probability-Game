@@ -45,7 +45,7 @@ public class GuiDead extends GuiMenu {
 	
 	public GuiDead()
 	{
-		backgroundColor = 0xff0000;
+		backgroundColor = 0xaa0000;
 	}
 	
 	@Override
@@ -94,6 +94,10 @@ public class GuiDead extends GuiMenu {
 		anim[getDirectionID(d)].render(playerPos, playerDim);
 		
 		Fonts.get("Jungle").drawCenteredString("YOU LOST!", 20, 100, 0xffffff);
+		Fonts.get("Arial").drawCenteredString("Max Health: "+(int)(GameStatistics.playerHealthModifier*GameStatistics.BASE_PLAYER_HEALTH), 210, 30, 0xffffff);
+		Fonts.get("Arial").drawCenteredString("Bullet Damage: "+(int)(GameStatistics.playerDamageModifier*GameStatistics.BASE_PLAYER_DAMAGE), 240, 30, 0xffffff);
+		Fonts.get("Arial").drawCenteredString("Wave: "+GameStatistics.wave, 150, 30, 0xffffff);
+		Fonts.get("Arial").drawCenteredString("Total Loot: "+GameStatistics.totalCoins+" coins", 180, 30, 0xffffff);
 	}
 	
 	@Override

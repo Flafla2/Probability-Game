@@ -2,7 +2,6 @@ package com.remote.probability.gui;
 
 import org.lwjgl.input.Keyboard;
 
-import com.esotericsoftware.minlog.Log;
 import com.remote.probability.AudioSwitcher;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.MapGenerator;
@@ -60,7 +59,7 @@ public class GuiRiskSelect extends GuiMenu {
 	private void calculateCurrentValues()
 	{
 		if(currentValues == null)
-			currentValues = new String[3];
+			currentValues = new String[4];
 		currentValues[0] = "Current Max Health: "+(int)(GameStatistics.playerHealthModifier*100)+" HP";
 		currentValues[1] = "Current: "+(int)GameStatistics.bulletBounceNum+" Bounces";
 		currentValues[2] = "Current Extra Lives: "+GameStatistics.lives;
@@ -164,7 +163,7 @@ public class GuiRiskSelect extends GuiMenu {
 			else if(upgrade == 2) // Extra Life
 				GameStatistics.lives++;
 			else if(upgrade == 3)
-				GameStatistics.playerDamageModifier += 0.1;
+				GameStatistics.playerDamageModifier ++;
 			
 			calculateCurrentValues();
 		}

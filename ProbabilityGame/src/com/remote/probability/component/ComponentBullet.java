@@ -121,7 +121,7 @@ public class ComponentBullet extends Component {
 			{
 				if(Collider.collides(collider,comp.hitboxPos.add(e.pos).getColliderWithDim(comp.hitboxDim)))
 				{
-					comp.hit(movement.normalize(),(int) (GameStatistics.playerDamageModifier*10d));
+					comp.hit(movement.normalize(),(int) (GameStatistics.playerDamageModifier*GameStatistics.BASE_PLAYER_DAMAGE));
 					entity.getMap().getEntityList().removeEntityFromList(entity);
 					return;
 				}

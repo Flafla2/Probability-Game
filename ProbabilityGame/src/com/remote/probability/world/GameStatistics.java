@@ -15,13 +15,12 @@ public class GameStatistics {
 	
 	public static double playerDamageModifier = 1.0;
 	public static double playerHealthModifier = 1.0;
-	public static double playerSpeedModifier = 1.0;
 	public static int bulletBounceNum = 0;
-	public static int bombNum = 0;
 	
 	public static double finalDifficultyModifier = 1;
 	public static int riskFactor = 0;
 	public static int lives = 0;
+	public static int totalCoins = 0;
 	
 	public static final int HEALTH_INCREASE_COST = 100;
 	public static final int BULLET_BOUNCE_COST = 500;
@@ -86,10 +85,9 @@ public class GameStatistics {
 		wave = 0;
 		playerDamageModifier = 1;
 		playerHealthModifier = 1;
-		playerSpeedModifier = 1;
 		bulletBounceNum = 0;
-		bombNum = 0;
 		finalDifficultyModifier = 1;
+		totalCoins = 0;
 		riskFactor = 0;
 		lives = 0;
 	}
