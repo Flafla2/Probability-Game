@@ -1,13 +1,7 @@
 package com.remote.probability.gui;
 
-import org.lwjgl.input.Keyboard;
-
 import com.remote.probability.AudioSwitcher;
 import com.remote.probability.AudioSwitcher.SoundMode;
-import com.remote.probability.world.GameStatistics;
-import com.remote.probability.world.MapGenerator;
-import com.remote.probability.world.MapGeneratorSimple;
-import com.remote.remote2d.editor.GuiEditor;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
@@ -15,7 +9,6 @@ import com.remote.remote2d.engine.art.ResourceLoader;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.gui.GuiButton;
 import com.remote.remote2d.engine.gui.GuiMenu;
-import com.remote.remote2d.engine.io.R2DFileUtility;
 import com.remote.remote2d.engine.logic.Vector2;
 
 public class GuiCredits extends GuiMenu {

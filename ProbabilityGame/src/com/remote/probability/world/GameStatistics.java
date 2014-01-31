@@ -51,17 +51,17 @@ public class GameStatistics {
 	
 	public static double getMaxDifficulty()
 	{
-		return getMoneyMultiplier(finalDifficultyModifier,riskFactor);
+		return getMaxDifficulty(finalDifficultyModifier,riskFactor);
 	}
 	
 	public static double getMaxDifficulty(int riskFactor)
 	{
-		return getMoneyMultiplier(finalDifficultyModifier,riskFactor);
+		return getMaxDifficulty(finalDifficultyModifier,riskFactor);
 	}
 	
-	public static double getMaxDifficulty(double finalDifficultyModifier, int riskFactor)
+	public static double getMaxDifficulty(double fdm, int riskFactor)
 	{
-		return getMoneyMultiplier(finalDifficultyModifier,riskFactor);
+		return 1+(fdm+0.2)*(((double)riskFactor)/100d+1);
 	}
 	
 	public static double getFinalDifficultyModifier()
@@ -76,7 +76,7 @@ public class GameStatistics {
 	
 	public static double getFinalDifficultyModifier(double fdm, int riskFactor)
 	{
-		return 1+(fdm+0.2)*(((double)Game.random.nextInt(riskFactor+1))/100d+1);
+		return (fdm+0.2)*(((double)Game.random.nextInt(riskFactor+1))/100d+1);
 	}
 
 	public static void reset() {

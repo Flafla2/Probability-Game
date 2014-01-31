@@ -5,6 +5,8 @@ import com.remote.probability.world.MapGenerator.ProgressMeter;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Fonts;
 import com.remote.remote2d.engine.art.Renderer;
+import com.remote.remote2d.engine.art.ResourceLoader;
+import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.gui.GuiMenu;
 import com.remote.remote2d.engine.logic.Vector2;
 import com.remote.remote2d.engine.world.Map;
@@ -25,6 +27,8 @@ public class GuiLoadMap extends GuiMenu {
 		this.width = width;
 		this.height = height;
 		this.seed = seed;
+		
+		backgroundColor = 0x2c1e23;
 	}
 	
 	@Override
@@ -49,13 +53,30 @@ public class GuiLoadMap extends GuiMenu {
 	}
 	
 	@Override
+	public void renderBackground(float interpolation)
+	{
+		super.renderBackground(interpolation);
+		
+		Texture tex = ResourceLoader.getTexture("res/gui/title_screen.png");
+		Vector2 dim = new Vector2(tex.getImage().getWidth(),tex.getImage().getHeight());
+		float ratio = ((float)screenWidth())/dim.x;
+		dim.x *= ratio;
+		dim.y *= ratio;
+		
+		if(dim.y >= screenHeight())
+			Renderer.drawRect(new Vector2(0, -dim.y+screenHeight()), dim, tex, 0xffffff, 1);
+		else
+			Renderer.drawRect(new Vector2(0), dim, tex, 0xffffff, 1);
+		
+		Fonts.get("Jungle").drawCenteredString("LOADING...", 10, 70, 0xffffff);
+	}
+	
+	@Override
 	public void render(float interpolation)
 	{
-		super.render(interpolation);
-		Fonts.get("Arial").drawCenteredString("Loading: "+progress.getStage(), screenHeight()/2-50, 20, 0x000000);
-		
-		Renderer.drawLineRect(new Vector2(screenWidth()/2-300,screenHeight()/2-20), new Vector2(600,40), 0x000000, 1.0f);
-		Renderer.drawRect(new Vector2(screenWidth()/2-300,screenHeight()/2-20), new Vector2((float)(600*progress.getProgress()),40), 0x000000, 1.0f);
+		super.render(interpolation);		
+		Renderer.drawLineRect(new Vector2(screenWidth()/2-300,screenHeight()/2-20), new Vector2(600,40), 0xffffff, 1.0f);
+		Renderer.drawRect(new Vector2(screenWidth()/2-300,screenHeight()/2-20), new Vector2((float)(600*progress.getProgress()),40), 0xffffff, 1.0f);
 	}
 	
 }

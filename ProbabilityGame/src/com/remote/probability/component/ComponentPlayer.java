@@ -117,8 +117,10 @@ public class ComponentPlayer extends Component {
 		else hitbackVelocity.y = 0;
 		
 		//Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
-		if(!goingIntoWallTile(entity.pos.add(velocity)))
-			entity.pos = entity.pos.add(velocity);
+		if(!goingIntoWallTile(entity.pos.add(new Vector2(velocity.x,0))))
+			entity.pos = entity.pos.add(new Vector2(velocity.x,0));
+		if(!goingIntoWallTile(entity.pos.add(new Vector2(0,velocity.y))))
+			entity.pos = entity.pos.add(new Vector2(0,velocity.y));
 		if(entity.material.getAnimation() != null)
 		{
 			entity.material.getAnimation().flippedX = flipped;

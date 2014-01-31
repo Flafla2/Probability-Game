@@ -12,7 +12,7 @@ public abstract class MapGenerator {
 	public static int DEFAULT_TILE_SIZE = 64;
 	public static final String PLAYER = "res/entity/player/lord_lard.entity.xml";
 	
-	public static final int MONSTER_SPAWN_PROBABILITY = 50;
+	public static final int MONSTER_SPAWN_PROBABILITY = 30;
 	
 	public abstract Map generateTiledMap(int width, int height, long seed, ProgressMeter progress);
 	
@@ -73,7 +73,11 @@ public abstract class MapGenerator {
 						if(top || bot || lef || rig)
 							continue;
 												
-						int rand = random.nextInt((int) (MONSTER_SPAWN_PROBABILITY/GameStatistics.finalDifficultyModifier));
+						int rand = random.nextInt((int) (MONSTER_SPAWN_PROBABILITY));///GameStatistics.finalDifficultyModifier));
+						Vector2 dist = new Vector2(x-px,y-py).abs();
+						float distsq = dist.x*dist.x+dist.y*dist.y;
+						if(distsq < tileWidth*3)
+							continue;
 						if(rand == 0)
 						{
 							int enemyType = random.nextInt(3);

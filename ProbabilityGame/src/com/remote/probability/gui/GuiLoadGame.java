@@ -8,7 +8,6 @@ import com.remote.remote2d.engine.art.ResourceLoader;
 import com.remote.remote2d.engine.art.Texture;
 import com.remote.remote2d.engine.gui.GuiMenu;
 import com.remote.remote2d.engine.logic.Vector2;
-import com.remote.remote2d.engine.world.Map;
 
 public class GuiLoadGame extends GuiMenu {
 	

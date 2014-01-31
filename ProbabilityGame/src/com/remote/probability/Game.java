@@ -11,7 +11,6 @@ import com.remote.probability.component.ComponentPlayer;
 import com.remote.probability.component.ComponentTile;
 import com.remote.probability.gui.GuiInGame;
 import com.remote.probability.gui.GuiLoadGame;
-import com.remote.probability.gui.GuiMainMenu;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.Remote2DGame;
 import com.remote.remote2d.engine.StretchType;

@@ -38,11 +38,10 @@ public class AudioSwitcher {
 	
 	public static void init()
 	{
+		for(String s : preloadSounds) AudioHandler.preloadSound(s);
 		AudioHandler.preloadSound(title);
 		AudioHandler.preloadSound(end);
 		for(String b : background) AudioHandler.preloadSound(b);
-		
-		for(String s : preloadSounds) AudioHandler.preloadSound(s);
 	}
 	
 	public static void setMusicVol(float vol)
@@ -73,6 +72,8 @@ public class AudioSwitcher {
 			break;
 		case INGAME:
 			setRandomBGMusic();
+			break;
+		default:
 			break;
 		}
 		

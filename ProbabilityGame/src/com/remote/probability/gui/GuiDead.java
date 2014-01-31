@@ -7,7 +7,6 @@ import com.remote.probability.component.ComponentPlayer.Direction;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.MapGenerator;
 import com.remote.probability.world.MapGeneratorSimple;
-import com.remote.remote2d.engine.AudioHandler;
 import com.remote.remote2d.engine.Remote2D;
 import com.remote.remote2d.engine.art.Animation;
 import com.remote.remote2d.engine.art.Fonts;

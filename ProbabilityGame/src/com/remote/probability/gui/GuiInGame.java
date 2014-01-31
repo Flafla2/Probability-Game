@@ -51,10 +51,11 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		if(module != null)
 			module.renderDebug(interpolation);
 		
-		Fonts.get("Jungle").drawString("Health:", 7, 7, 20, 0x777777);
-		Fonts.get("Jungle").drawString("Health:", 10, 10, 20, 0xffffff);
-		Fonts.get("Jungle").drawString("Difficulty: "+(int)(GameStatistics.finalDifficultyModifier*100)+"%", 10, 30, 20, 0xffffff);
-		Fonts.get("Jungle").drawString("Coins: "+GameStatistics.playerMoney, 10, 50, 20, 0xffffff);
+		Renderer.drawRect(new Vector2(0), new Vector2(300,100), 0x000000, 0.5f);
+		Fonts.get("Pixel_Arial").drawString("Health:", 10, 10, 16, 0xffffff);
+		Fonts.get("Pixel_Arial").drawString("Difficulty: "+(int)(GameStatistics.finalDifficultyModifier*100)+"%", 10, 30, 16, 0xffffff);
+		Fonts.get("Pixel_Arial").drawString("Coins: "+(int)GameStatistics.playerMoney, 10, 50, 16, 0xffffff);
+		Fonts.get("Pixel_Arial").drawString("Lives Remaining: "+GameStatistics.lives, 10, 70, 16, 0xffffff);
 		
 		
 		if(HEALTH_POS == -1)

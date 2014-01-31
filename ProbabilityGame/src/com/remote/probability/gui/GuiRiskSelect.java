@@ -1,7 +1,5 @@
 package com.remote.probability.gui;
 
-import org.lwjgl.input.Keyboard;
-
 import com.remote.probability.AudioSwitcher;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.MapGenerator;
@@ -54,6 +52,8 @@ public class GuiRiskSelect extends GuiMenu {
 			if(upgradeWidth[x] > maxUpgradeWidth)
 				maxUpgradeWidth = upgradeWidth[x];
 		}
+		
+		backgroundColor = 0x000000;
 	}
 	
 	private void calculateCurrentValues()
@@ -88,7 +88,7 @@ public class GuiRiskSelect extends GuiMenu {
 				maxCostWidth = costWidth;
 		}
 		
-		int yPos = 400;
+		int yPos = 350;
 		for(int x=0;x<upgradeItems.length;x++)
 		{
 			buttonList.add(new GuiButtonStyled(x+2,new Vector2(screenWidth()/2+maxUpgradeWidth/2+maxCostWidth-170,yPos+25),new Vector2(200,40),"Buy"));
@@ -113,11 +113,11 @@ public class GuiRiskSelect extends GuiMenu {
 		Fonts.get("Jungle").drawCenteredString("CHOOSE YOUR RISK FACTOR", 20, 50, 0xffffff);
 		Fonts.get("Pixel_Arial").drawCenteredString("PROJECTED DIFFICULTY: "+
 				(int)round(GameStatistics.getMaxDifficulty(0)*100,0)+"% - "+(int)round(GameStatistics.getMaxDifficulty((int)(slider.progress*100))*100,0)+"%"
-				, 220, 25, 0xffffff);
-		Fonts.get("Pixel_Arial").drawCenteredString("TREASURE MULTIPLIER: x"+round(GameStatistics.getMoneyMultiplier((int)(slider.progress*100)),2), 260, 25, 0xffffff);
-		Fonts.get("Jungle").drawCenteredString("SHOP", 315, 60, 0xffffff);
-		Fonts.get("Pixel_Arial").drawCenteredString("Current Money: "+(int)(GameStatistics.playerMoney), 380, 15, 0x999999);
-		int yPos = 400;
+				, 210, 25, 0xffffff);
+		Fonts.get("Pixel_Arial").drawCenteredString("TREASURE MULTIPLIER: x"+round(GameStatistics.getMoneyMultiplier((int)(slider.progress*100)),2), 250, 25, 0xffffff);
+		Fonts.get("Jungle").drawCenteredString("SHOP", 270, 60, 0xffffff);
+		Fonts.get("Pixel_Arial").drawCenteredString("Current Money: "+(int)(GameStatistics.playerMoney), 330, 15, 0x999999);
+		int yPos = 350;
 		int scrw = screenWidth()/2;
 		for(int x=0;x<upgradeItems.length;x++)
 		{
