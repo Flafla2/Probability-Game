@@ -10,7 +10,7 @@
         <type id="8" name="name"/>
         <type id="8" name="uuid">4ed61620-0927-44d8-bf31-7dfd4a28270e</type>
         <type id="10" name="component_0">
-            <type id="8" name="className">Explosion</type>
+            <type id="8" name="className">Animate Once</type>
             <type id="8" name="uuid">d59014f8-5125-42ae-a902-2c8c22387bb4</type>
         </type>
         <type id="10" name="material">

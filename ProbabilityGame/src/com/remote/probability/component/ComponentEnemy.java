@@ -239,7 +239,7 @@ public class ComponentEnemy extends Component {
 			explodeMoney(Math.round(money*GameStatistics.getMoneyMultiplier(GameStatistics.wave, GameStatistics.riskFactor)));
 			entity.getMap().getEntityList().removeEntityFromList(entity);
 			
-			AudioHandler.playSound("res/sound/fx/enemy/death_explosion_"+Game.random.nextInt(2)+".wav", entity.pos.add(entity.dim.divide(new Vector2(2))), false, false);
+			AudioHandler.playSound("res/sound/fx/enemy/death_explosion_"+Game.random.nextInt(2)+".wav", false, false);
 			if(!isOtherEnemyInMap())
 				GameStatistics.finished = true;
 		}

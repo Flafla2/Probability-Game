@@ -21,6 +21,16 @@ public class GameStatistics {
 	
 	public static double finalDifficultyModifier = 1;
 	public static int riskFactor = 0;
+	public static int lives = 0;
+	
+	public static final int HEALTH_INCREASE_COST = 100;
+	public static final int BULLET_BOUNCE_COST = 500;
+	public static final int EXTRA_LIFE_COST = 1000;
+	public static final int DAMAGE_INCREASE_COST = 300;
+	
+	public static final int BASE_PLAYER_HEALTH = 100;
+	public static final int BASE_PLAYER_DAMAGE = 10;
+	
 	
 	public static float getMoneyMultiplier(int wave, int riskFactor)
 	{
@@ -46,6 +56,20 @@ public class GameStatistics {
 	public static double maxFinalDifficultyModifier(int wave, int riskFactor)
 	{
 		return 1+(float)(riskFactor*wave/5+getRoundProgressionFactor(wave));
+	}
+
+	public static void reset() {
+		playerHealth = 1;
+		playerMoney = 0;
+		wave = 0;
+		playerDamageModifier = 1;
+		playerHealthModifier = 1;
+		playerSpeedModifier = 1;
+		bulletBounceNum = 0;
+		bombNum = 0;
+		finalDifficultyModifier = 1;
+		riskFactor = 0;
+		lives = 0;
 	}
 	
 }

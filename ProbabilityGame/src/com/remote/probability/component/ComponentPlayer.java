@@ -146,8 +146,6 @@ public class ComponentPlayer extends Component {
 			}
 		} else
 			bulletTimer = 0;
-		
-		AudioHandler.setListenerPos(entity.pos.add(entity.dim.divide(new Vector2(2))));
 	}
 	
 	private Vector2 getBulletSpawnPosLocal(Vector2 bulletDim)

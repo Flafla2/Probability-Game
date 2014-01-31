@@ -38,8 +38,6 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 	public void initGui()
 	{
 		super.initGui();
-		if(AudioSwitcher.getSoundMode() != SoundMode.INGAME)
-			AudioSwitcher.setSoundMode(SoundMode.INGAME);
 	}
 	
 	@Override
@@ -94,6 +92,9 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 	public void tick(int i, int j, int k)
 	{
 		super.tick(i, j, k);
+		if(AudioSwitcher.getSoundMode() != SoundMode.INGAME)
+			AudioSwitcher.setSoundMode(SoundMode.INGAME);
+		
 		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_F))
 			GameStatistics.finished = true;
 		

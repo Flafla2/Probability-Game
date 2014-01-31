@@ -2,7 +2,7 @@ package com.remote.probability.component;
 
 import com.remote.remote2d.engine.entity.component.Component;
 
-public class ComponentExplosion extends Component {
+public class ComponentAnimOnce extends Component {
 	
 	private long dieTime = -1;
 

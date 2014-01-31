@@ -6,7 +6,7 @@ import com.esotericsoftware.minlog.Log;
 import com.remote.probability.component.ComponentBullet;
 import com.remote.probability.component.ComponentCoin;
 import com.remote.probability.component.ComponentEnemy;
-import com.remote.probability.component.ComponentExplosion;
+import com.remote.probability.component.ComponentAnimOnce;
 import com.remote.probability.component.ComponentPlayer;
 import com.remote.probability.component.ComponentTile;
 import com.remote.probability.gui.GuiInGame;
@@ -43,7 +43,7 @@ public class Game extends Remote2DGame {
 		InsertableComponentList.addInsertableComponent("Player", ComponentPlayer.class);
 		InsertableComponentList.addInsertableComponent("Enemy", ComponentEnemy.class);
 		InsertableComponentList.addInsertableComponent("Bullet", ComponentBullet.class);
-		InsertableComponentList.addInsertableComponent("Explosion", ComponentExplosion.class);
+		InsertableComponentList.addInsertableComponent("Animate Once", ComponentAnimOnce.class);
 		InsertableComponentList.addInsertableComponent("Coin", ComponentCoin.class);
 		InsertableComponentList.addInsertableComponent("Tile", ComponentTile.class);
 		

@@ -46,6 +46,8 @@ public abstract class MapGenerator {
 					
 					if(tiles[x][y] == Tile.WALL.getID())
 						tile.material.setUVPos(new Vector2((float)(random.nextInt(23)+1)/24f,tile.material.getUVPos().y));
+					else if(tiles[x][y] == Tile.GROUND.getID())
+						tile.material.setUVPos(new Vector2((float)(random.nextInt(3)+1)/4f,tile.material.getUVPos().y));
 					
 					num ++;
 					progress.mapLoadProgress = ((double)num)/(tiles.length*tiles[0].length);

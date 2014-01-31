@@ -68,6 +68,9 @@ public class ComponentCoin extends Component {
 				else
 					AudioHandler.playSound("res/sound/fx/coin/coin"+(Game.random.nextInt(5)+1)+".wav", false, false);
 				
+				Entity shine = player.getMap().getEntityList().instantiatePrefab((baseValue < 10) ? "res/entity/effects/shine_small.entity.xml" : "res/entity/effects/shine_big.entity.xml");
+				shine.pos = new Vector2(player.pos.x+Game.random.nextInt((int)comp.hitboxDim.x)+comp.hitboxPos.x,
+						player.pos.y+Game.random.nextInt((int)comp.hitboxDim.y)+comp.hitboxPos.y);
 			}
 		}
 		

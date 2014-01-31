@@ -4,6 +4,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.remote.probability.AudioSwitcher;
 import com.remote.probability.AudioSwitcher.SoundMode;
+import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.MapGenerator;
 import com.remote.probability.world.MapGeneratorSimple;
 import com.remote.remote2d.editor.GuiEditor;
@@ -36,9 +37,6 @@ public class GuiMainMenu extends GuiMenu{
 	@Override
 	public void initGui()
 	{
-		if(AudioSwitcher.getSoundMode() != SoundMode.TITLE)
-			AudioSwitcher.setSoundMode(SoundMode.TITLE);
-		
 		final int buttonWidth = 500;
 		final int buttonHeight = 40;
 		final int buttonx = screenWidth()/2-buttonWidth/2;
@@ -94,6 +92,8 @@ public class GuiMainMenu extends GuiMenu{
 //			message = "Hi, this is part of the game's many DRM features, which renders the game completely "
 //					+ "unplayable in case of piracy!  Nice try, pirate!";
 //			lastMessageTime = System.currentTimeMillis();
+			GameStatistics.reset();
+			
 			MapGenerator gen = new MapGeneratorSimple();
 			Remote2D.guiList.push(new GuiLoadMap(gen, 40, 40, 1337));
 		} else if(button.id == 1)
@@ -108,6 +108,8 @@ public class GuiMainMenu extends GuiMenu{
 	public void tick(int i, int j, int k)
 	{
 		super.tick(i, j, k);
+		if(AudioSwitcher.getSoundMode() != SoundMode.TITLE)
+			AudioSwitcher.setSoundMode(SoundMode.TITLE);
 		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_D))
 		{
 			debug = !debug;
