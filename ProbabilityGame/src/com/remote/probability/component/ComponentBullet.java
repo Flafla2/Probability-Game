@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.remote.probability.Game;
 import com.remote.probability.component.ComponentPlayer.Direction;
+import com.remote.probability.world.GameStatistics;
 import com.remote.remote2d.engine.entity.Entity;
 import com.remote.remote2d.engine.entity.component.Component;
 import com.remote.remote2d.engine.logic.Collider;
@@ -19,6 +20,7 @@ public class ComponentBullet extends Component {
 	private Direction direction = Direction.NORTHEAST;
 	private long despawnTimer = -1;
 	private boolean corrected = false;
+	private int bounces = 0;
 
 	@Override
 	public void init() {
@@ -86,12 +88,24 @@ public class ComponentBullet extends Component {
 			Vector2 correction = entity.getMap().getCorrection(getCollider());
 			if(corrected)
 			{
-				entity.getMap().getEntityList().removeEntityFromList(entity);
-				return;
+				if(bounces < GameStatistics.bulletBounceNum)
+				{
+					bounces++;
+					if(correction.x != 0) flipHorizontal();
+					if(correction.y != 0) flipVertical();
+					corrected = false;
+					entity.pos = entity.pos.subtract(movement);
+				} else
+				{
+					entity.getMap().getEntityList().removeEntityFromList(entity);
+					return;
+				}
+			} else
+			{
+				entity.pos = entity.pos.add(correction);
+				if(!correction.equals(new Vector2(0)))
+					corrected = true;
 			}
-			entity.pos = entity.pos.add(correction);
-			if(!correction.equals(new Vector2(0)))
-				corrected = true;
 		}
 				
 		if((despawnTimer != -1 && System.currentTimeMillis()-despawnTimer >= DESPAWN_TIME))
@@ -107,7 +121,7 @@ public class ComponentBullet extends Component {
 			{
 				if(Collider.collides(collider,comp.hitboxPos.add(e.pos).getColliderWithDim(comp.hitboxDim)))
 				{
-					comp.hit(movement.normalize(),10);
+					comp.hit(movement.normalize(),(int) (GameStatistics.playerDamageModifier*10d));
 					entity.getMap().getEntityList().removeEntityFromList(entity);
 					return;
 				}
@@ -115,6 +129,60 @@ public class ComponentBullet extends Component {
 		}
 	}
 	
+	private void flipHorizontal() {
+		switch(direction)
+		{
+		case NORTH:
+		case SOUTH:
+			break;
+		case EAST:
+			setDirection(Direction.WEST);
+			break;
+		case WEST:
+			setDirection(Direction.EAST);
+			break;
+		case NORTHEAST:
+			setDirection(Direction.NORTHWEST);
+			break;
+		case NORTHWEST:
+			setDirection(Direction.NORTHEAST);
+			break;
+		case SOUTHEAST:
+			setDirection(Direction.SOUTHWEST);
+			break;
+		case SOUTHWEST:
+			setDirection(Direction.SOUTHEAST);
+			break;
+		}
+	}
+	
+	private void flipVertical() {
+		switch(direction)
+		{
+		case EAST:
+		case WEST:
+			break;
+		case NORTH:
+			setDirection(Direction.SOUTH);
+			break;
+		case SOUTH:
+			setDirection(Direction.NORTH);
+			break;
+		case NORTHEAST:
+			setDirection(Direction.SOUTHEAST);
+			break;
+		case NORTHWEST:
+			setDirection(Direction.SOUTHWEST);
+			break;
+		case SOUTHEAST:
+			setDirection(Direction.NORTHEAST);
+			break;
+		case SOUTHWEST:
+			setDirection(Direction.NORTHWEST);
+			break;
+		}
+	}
+
 	private ColliderBox getCollider()
 	{
 		Vector2 cPos = new Vector2(0,0);

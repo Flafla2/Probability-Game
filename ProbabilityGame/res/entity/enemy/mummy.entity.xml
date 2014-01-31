@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <r2dxml>
-    <type id="10" name="Prefab">
+    <type id="10" name="mummy.entity.xml">
         <type id="11" name="dim">
             <x>96.0</x>
             <y>96.0</y>
@@ -8,7 +8,7 @@
         <type id="3" name="componentCount">1</type>
         <type id="5" name="rotation">0.0</type>
         <type id="8" name="name"/>
-        <type id="8" name="uuid">7c657169-4b05-4de3-8251-d301a8a2e0ea</type>
+        <type id="8" name="uuid">ff6d4d0a-79ce-4b0c-860c-35419f1644ba</type>
         <type id="10" name="component_0">
             <type id="11" name="hitboxPos">
                 <x>14.0</x>
@@ -16,7 +16,7 @@
             </type>
             <type id="3" name="attackFrequency">500</type>
             <type id="8" name="eastAnimation">res\anim\enemy\mummy_east.anim.xml</type>
-            <type id="3" name="detectionDistance">300</type>
+            <type id="3" name="detectionDistance">400</type>
             <type id="3" name="money">10</type>
             <type id="3" name="damage">10</type>
             <type id="11" name="hitboxDim">
@@ -47,8 +47,8 @@
             <type id="1" name="RenderType">2</type>
         </type>
         <type id="11" name="pos">
-            <x>0.0</x>
-            <y>0.0</y>
+            <x>-344.0</x>
+            <y>116.0</y>
         </type>
     </type>
 </r2dxml>

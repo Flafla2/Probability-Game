@@ -27,35 +27,57 @@ public class GameStatistics {
 	public static final int BULLET_BOUNCE_COST = 500;
 	public static final int EXTRA_LIFE_COST = 1000;
 	public static final int DAMAGE_INCREASE_COST = 300;
+	public static final int BULLET_DAMAGE_COST = 100;
 	
 	public static final int BASE_PLAYER_HEALTH = 100;
 	public static final int BASE_PLAYER_DAMAGE = 10;
 	
 	
-	public static float getMoneyMultiplier(int wave, int riskFactor)
+	public static double getMoneyMultiplier(double wave, int riskFactor)
 	{
-		return 1+wave/5+riskFactor/25;
+		double rf = riskFactor;
+		rf /= 100d;
+		return (1+0.2*wave)*(rf+1);
 	}
 	
-	public static int getTrueRiskVariable(int wave, int riskFactor)
+	public static double getMoneyMultiplier()
 	{
-		//return Game.random.nextInt(riskFactor*2)-riskFactor;
-		return Game.random.nextInt(riskFactor+1)*wave/5;
+		return getMoneyMultiplier(wave,riskFactor);
 	}
 	
-	public static int getRoundProgressionFactor(int wave)
+	public static double getMoneyMultiplier(int riskFactor)
 	{
-		return wave*20;
+		return getMoneyMultiplier(wave,riskFactor);
 	}
 	
-	public static double setFinalDifficultyModifier(int wave, int riskFactor)
+	public static double getMaxDifficulty()
 	{
-		return finalDifficultyModifier = 1+(double)(getTrueRiskVariable(wave, riskFactor)+getRoundProgressionFactor(wave))/100.0;
+		return getMoneyMultiplier(finalDifficultyModifier,riskFactor);
 	}
 	
-	public static double maxFinalDifficultyModifier(int wave, int riskFactor)
+	public static double getMaxDifficulty(int riskFactor)
 	{
-		return 1+(float)(riskFactor*wave/5+getRoundProgressionFactor(wave));
+		return getMoneyMultiplier(finalDifficultyModifier,riskFactor);
+	}
+	
+	public static double getMaxDifficulty(double finalDifficultyModifier, int riskFactor)
+	{
+		return getMoneyMultiplier(finalDifficultyModifier,riskFactor);
+	}
+	
+	public static double getFinalDifficultyModifier()
+	{
+		return getFinalDifficultyModifier(finalDifficultyModifier,riskFactor);
+	}
+	
+	public static double getFinalDifficultyModifier(int riskFactor)
+	{
+		return getFinalDifficultyModifier(finalDifficultyModifier,riskFactor);
+	}
+	
+	public static double getFinalDifficultyModifier(double fdm, int riskFactor)
+	{
+		return 1+(fdm+0.2)*(((double)Game.random.nextInt(riskFactor+1))/100d+1);
 	}
 
 	public static void reset() {

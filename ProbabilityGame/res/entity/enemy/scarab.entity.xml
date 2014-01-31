@@ -8,7 +8,7 @@
         <type id="3" name="componentCount">1</type>
         <type id="5" name="rotation">0.0</type>
         <type id="8" name="name"/>
-        <type id="8" name="uuid">476186ce-b6e3-42f2-a499-1c0b42dc1a9c</type>
+        <type id="8" name="uuid">dc207bf7-7ec2-40e7-890e-b7595b031964</type>
         <type id="10" name="component_0">
             <type id="11" name="hitboxPos">
                 <x>14.0</x>
@@ -18,17 +18,17 @@
             <type id="8" name="eastAnimation">res/anim/enemy/scarab_east.anim.xml</type>
             <type id="3" name="detectionDistance">300</type>
             <type id="3" name="money">8</type>
-            <type id="3" name="damage">10</type>
+            <type id="3" name="damage">15</type>
             <type id="11" name="hitboxDim">
                 <x>68.0</x>
                 <y>68.0</y>
             </type>
             <type id="8" name="southAnimation">res/anim/enemy/scarab_south.anim.xml</type>
-            <type id="6" name="maxHealth">100.0</type>
+            <type id="6" name="maxHealth">80.0</type>
             <type id="8" name="className">Enemy</type>
             <type id="8" name="uuid">676d5685-5c34-4557-9207-c7496cec02c9</type>
             <type id="8" name="northAnimation">res/anim/enemy/scarab_north.anim.xml</type>
-            <type id="5" name="walkSpeed">5.0</type>
+            <type id="5" name="walkSpeed">3.0</type>
         </type>
         <type id="10" name="material">
             <type id="11" name="uvDim">

@@ -58,7 +58,10 @@ public class ComponentEnemy extends Component {
 	@Override
 	public void renderAfter(boolean editor, float interpolation) {
 		if(editor)
+		{
 			entity.pos.add(hitboxPos).getColliderWithDim(hitboxDim).drawCollider(0x00ff00);
+			Renderer.drawCircleHollow(entity.pos.add(entity.dim.divide(new Vector2(2))), detectionDistance, 32, 0xff0000, 1);
+		}
 		
 		if(System.currentTimeMillis()-lastHitTime < 5000)
 		{
@@ -66,9 +69,6 @@ public class ComponentEnemy extends Component {
 			Renderer.drawRect(pos, new Vector2(100,10), 0x880000, 1);
 			Renderer.drawRect(pos, new Vector2((float)health*100,10), 0xff0000, 1);
 		}
-		
-//		if(detected)
-//			Fonts.get("Arial").drawString("!", entity.pos.x+entity.dim.x/2, entity.pos.y-20, 20, 0x00ff00);
 	}
 
 	@Override
@@ -236,7 +236,7 @@ public class ComponentEnemy extends Component {
 			explosion.pos.x = entity.pos.x+entity.dim.x/2-explosion.dim.x/2;
 			explosion.pos.y = entity.pos.y+entity.dim.y-explosion.dim.y;
 			
-			explodeMoney(Math.round(money*GameStatistics.getMoneyMultiplier(GameStatistics.wave, GameStatistics.riskFactor)));
+			explodeMoney((int) Math.round(money*GameStatistics.getMoneyMultiplier()));
 			entity.getMap().getEntityList().removeEntityFromList(entity);
 			
 			AudioHandler.playSound("res/sound/fx/enemy/death_explosion_"+Game.random.nextInt(2)+".wav", false, false);

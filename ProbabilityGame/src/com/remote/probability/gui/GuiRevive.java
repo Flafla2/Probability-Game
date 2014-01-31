@@ -17,7 +17,10 @@ import com.remote.remote2d.engine.logic.Collider;
 import com.remote.remote2d.engine.logic.ColliderBox;
 import com.remote.remote2d.engine.logic.Vector2;
 
-public class GuiDead extends GuiMenu {
+public class GuiRevive extends GuiMenu {
+	
+	private long animationStart = -1;
+	private boolean turned = false;
 	
 	public ColliderBox[] outer;
 	
@@ -43,16 +46,17 @@ public class GuiDead extends GuiMenu {
 	
 	private static Animation[] anim;
 	
-	public GuiDead()
+	public GuiRevive()
 	{
-		backgroundColor = 0xff0000;
+		backgroundColor = 0x000000;
 	}
 	
 	@Override
 	public void initGui()
 	{
 		buttonList.clear();
-		buttonList.add(new GuiButtonStyled(1,new Vector2(screenWidth()/2-300,screenHeight()-50),new Vector2(600,40),"Quit"));
+		buttonList.add(new GuiButtonStyled(1,new Vector2(screenWidth()/2-305,screenHeight()-50),new Vector2(300,40),"Quit"));
+		buttonList.add(new GuiButtonStyled(0,new Vector2(screenWidth()/2+5,screenHeight()-50),new Vector2(300,40),"Restart Wave"));
 		
 		outer = new ColliderBox[4];
 		outer[0] = new ColliderBox(new Vector2(-50),new Vector2(50,screenHeight()+100));
@@ -93,7 +97,22 @@ public class GuiDead extends GuiMenu {
 			return;
 		anim[getDirectionID(d)].render(playerPos, playerDim);
 		
-		Fonts.get("Jungle").drawCenteredString("YOU LOST!", 20, 100, 0xffffff);
+		if(animationStart == -1)
+			animationStart = System.currentTimeMillis();
+		
+		if(!turned)
+			Fonts.get("Jungle").drawCenteredString("Lives: "+GameStatistics.lives, 70, 70, 0xffffff);
+		else
+		{
+			Fonts.get("Pixel_Arial").drawCenteredString("You lost a life!  Continue?", 20, 25, 0xffffff);
+			Fonts.get("Jungle").drawCenteredString("Lives: "+(GameStatistics.lives-1), 100, 100, 0xff0000);
+		}
+		
+		if(System.currentTimeMillis()-animationStart > 2000 && !turned)
+		{
+			AudioHandler.playSound("res/sound/fx/player/falling_male.wav", true, false);
+			turned = true;
+		}
 	}
 	
 	@Override
@@ -101,8 +120,8 @@ public class GuiDead extends GuiMenu {
 	{
 		super.tick(i, j, k);
 		
-		if(AudioSwitcher.getSoundMode() != SoundMode.WIN)
-			AudioSwitcher.setSoundMode(SoundMode.WIN);
+		if(AudioSwitcher.getSoundMode() != SoundMode.NONE)
+			AudioSwitcher.setSoundMode(SoundMode.NONE);
 		
 		if(anim == null)
 		{

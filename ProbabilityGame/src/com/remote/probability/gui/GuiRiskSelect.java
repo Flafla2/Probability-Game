@@ -1,6 +1,9 @@
 package com.remote.probability.gui;
 
+import org.lwjgl.input.Keyboard;
+
 import com.esotericsoftware.minlog.Log;
+import com.remote.probability.AudioSwitcher;
 import com.remote.probability.world.GameStatistics;
 import com.remote.probability.world.MapGenerator;
 import com.remote.probability.world.MapGeneratorSimple;
@@ -20,8 +23,8 @@ public class GuiRiskSelect extends GuiMenu {
 	private GuiMenu below;
 	private GuiSlider slider;
 	
-	private static final String[] upgradeItems = {"+10 Max Health","+1 Bullets Bounce Off Walls","+1 Extra Life"};
-	private static final int[] upgradeCost = {GameStatistics.HEALTH_INCREASE_COST, GameStatistics.BULLET_BOUNCE_COST, GameStatistics.EXTRA_LIFE_COST};
+	private static final String[] upgradeItems = {"+20 Max Health","+1 Bullets Bounce Off Walls","+1 Extra Life","+10 Bullet Damage"};
+	private static final int[] upgradeCost = {GameStatistics.HEALTH_INCREASE_COST, GameStatistics.BULLET_BOUNCE_COST, GameStatistics.EXTRA_LIFE_COST, GameStatistics.BULLET_DAMAGE_COST};
 	private static Texture[] icons;
 	
 	private int[] upgradeWidth;
@@ -37,10 +40,11 @@ public class GuiRiskSelect extends GuiMenu {
 		slider = new GuiSlider(new Vector2(100,100),new Vector2(screenWidth()-200,96),200,0);
 		if(icons == null)
 		{
-			icons = new Texture[3];
+			icons = new Texture[4];
 			icons[0] = ResourceLoader.getTexture("res/gui/p_heart.png");
 			icons[1] = ResourceLoader.getTexture("res/gui/p_bullet.png");
 			icons[2] = ResourceLoader.getTexture("res/gui/p_heart.png");
+			icons[3] = ResourceLoader.getTexture("res/gui/p_bullet.png");
 		}
 		calculateCurrentValues();
 		
@@ -58,8 +62,9 @@ public class GuiRiskSelect extends GuiMenu {
 		if(currentValues == null)
 			currentValues = new String[3];
 		currentValues[0] = "Current Max Health: "+(int)(GameStatistics.playerHealthModifier*100)+" HP";
-		currentValues[1] = "Current: "+(int)GameStatistics.bulletBounceNum*100+" Bounces";
+		currentValues[1] = "Current: "+(int)GameStatistics.bulletBounceNum+" Bounces";
 		currentValues[2] = "Current Extra Lives: "+GameStatistics.lives;
+		currentValues[3] = "Current Damage: "+(int)(GameStatistics.playerDamageModifier*10);
 	}
 	
 	@Override
@@ -84,7 +89,7 @@ public class GuiRiskSelect extends GuiMenu {
 				maxCostWidth = costWidth;
 		}
 		
-		int yPos = 350;
+		int yPos = 400;
 		for(int x=0;x<upgradeItems.length;x++)
 		{
 			buttonList.add(new GuiButtonStyled(x+2,new Vector2(screenWidth()/2+maxUpgradeWidth/2+maxCostWidth-170,yPos+25),new Vector2(200,40),"Buy"));
@@ -108,10 +113,12 @@ public class GuiRiskSelect extends GuiMenu {
 		
 		Fonts.get("Jungle").drawCenteredString("CHOOSE YOUR RISK FACTOR", 20, 50, 0xffffff);
 		Fonts.get("Pixel_Arial").drawCenteredString("PROJECTED DIFFICULTY: "+
-		GameStatistics.getRoundProgressionFactor(GameStatistics.wave)+"% - "+(int)GameStatistics.maxFinalDifficultyModifier(GameStatistics.wave, (int)(slider.progress*100))+"%", 230, 25, 0xffffff);
-		Fonts.get("Jungle").drawCenteredString("SHOP", 265, 60, 0xffffff);
-		Fonts.get("Pixel_Arial").drawCenteredString("Current Money: "+(int)(GameStatistics.playerMoney), 330, 15, 0x999999);
-		int yPos = 350;
+				(int)round(GameStatistics.getMaxDifficulty(0)*100,0)+"% - "+(int)round(GameStatistics.getMaxDifficulty((int)(slider.progress*100))*100,0)+"%"
+				, 220, 25, 0xffffff);
+		Fonts.get("Pixel_Arial").drawCenteredString("TREASURE MULTIPLIER: x"+round(GameStatistics.getMoneyMultiplier((int)(slider.progress*100)),2), 260, 25, 0xffffff);
+		Fonts.get("Jungle").drawCenteredString("SHOP", 315, 60, 0xffffff);
+		Fonts.get("Pixel_Arial").drawCenteredString("Current Money: "+(int)(GameStatistics.playerMoney), 380, 15, 0x999999);
+		int yPos = 400;
 		int scrw = screenWidth()/2;
 		for(int x=0;x<upgradeItems.length;x++)
 		{
@@ -121,6 +128,9 @@ public class GuiRiskSelect extends GuiMenu {
 			Fonts.get("Pixel_Arial").drawString(currentValues[x], scrw-maxUpgradeWidth/2, yPos+25, 16, 0x999999);
 			yPos += iconSize+50;
 		}
+		
+		if(System.currentTimeMillis()-lastMessageTime < 2000)
+			Fonts.get("Pixel_Arial").drawCenteredString("Not Enough Money!", screenHeight()-375, 30, 0xff0000);
 	}
 	
 	@Override
@@ -131,7 +141,7 @@ public class GuiRiskSelect extends GuiMenu {
 			while(!(Remote2D.guiList.peek() instanceof GuiMainMenu)) Remote2D.guiList.pop();
 		} else if(button.id == 1)
 		{
-			GameStatistics.setFinalDifficultyModifier(GameStatistics.wave, (int)(slider.progress*100));
+			GameStatistics.finalDifficultyModifier = GameStatistics.getFinalDifficultyModifier((int)(slider.progress*100));
 			GameStatistics.riskFactor = (int)(slider.progress*100);
 			Remote2D.guiList.pop();
 			MapGenerator gen = new MapGeneratorSimple();
@@ -142,16 +152,19 @@ public class GuiRiskSelect extends GuiMenu {
 			if(upgradeCost[upgrade] > GameStatistics.playerMoney)
 			{
 				AudioHandler.playSound("res/sound/fx/Upgrade_Fail.wav", true, false);
+				lastMessageTime = System.currentTimeMillis();
 				return;
 			}
 			AudioHandler.playSound("res/sound/fx/Upgrade.wav", true, false);
 			GameStatistics.playerMoney -= upgradeCost[upgrade];
 			if(upgrade == 0) // Max Health += 10
-				GameStatistics.playerHealthModifier += 0.1;
+				GameStatistics.playerHealthModifier += 0.2;
 			else if(upgrade == 1) // Bullets Bounce
 				GameStatistics.bulletBounceNum++;
 			else if(upgrade == 2) // Extra Life
 				GameStatistics.lives++;
+			else if(upgrade == 3)
+				GameStatistics.playerDamageModifier += 0.1;
 			
 			calculateCurrentValues();
 		}
@@ -162,6 +175,13 @@ public class GuiRiskSelect extends GuiMenu {
 	{
 		super.tick(i, j, k);
 		slider.tick(i, j, k);
+		AudioSwitcher.tick();
+		
+		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_M))
+		{
+			GameStatistics.playerMoney += 500;
+			calculateCurrentValues();
+		}
 	}
 	
 	public static double round(double value, int places) {

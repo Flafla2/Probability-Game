@@ -7,7 +7,9 @@ import org.lwjgl.input.Mouse;
 
 import com.remote.probability.Game;
 import com.remote.probability.gui.GuiDead;
+import com.remote.probability.gui.GuiRevive;
 import com.remote.probability.world.GameStatistics;
+import com.remote.probability.world.Tile;
 import com.remote.remote2d.engine.AudioHandler;
 import com.remote.remote2d.engine.DisplayHandler;
 import com.remote.remote2d.engine.Remote2D;
@@ -114,8 +116,9 @@ public class ComponentPlayer extends Component {
 			hitbackVelocity.y -= hitbackVelocity.y/4;
 		else hitbackVelocity.y = 0;
 		
-		Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
-		entity.pos = entity.pos.add(velocity.add(correction));		
+		//Vector2 correction = entity.getMap().getCorrection(hitboxPos.add(entity.pos).add(velocity).getColliderWithDim(hitboxDim));
+		if(!goingIntoWallTile(entity.pos.add(velocity)))
+			entity.pos = entity.pos.add(velocity);
 		if(entity.material.getAnimation() != null)
 		{
 			entity.material.getAnimation().flippedX = flipped;
@@ -125,7 +128,6 @@ public class ComponentPlayer extends Component {
 		}
 		
 		entity.getMap().camera.pos = entity.pos.add(entity.dim.divide(new Vector2(2)));
-		//entity.getMap().camera.updatePos();
 		
 		if(Mouse.isButtonDown(0))
 		{
@@ -146,6 +148,25 @@ public class ComponentPlayer extends Component {
 			}
 		} else
 			bulletTimer = 0;
+	}
+	
+	private boolean goingIntoWallTile(Vector2 pos)
+	{
+		byte[] ret = new byte[4];
+		float x = (pos.x+hitboxPos.x)/((float)GameStatistics.tileSize);
+		float y = (pos.y+hitboxPos.y)/((float)GameStatistics.tileSize);
+		float xDim = hitboxDim.x/((float)GameStatistics.tileSize);
+		float yDim = hitboxDim.y/((float)GameStatistics.tileSize);
+		ret[0] = GameStatistics.map[(int)x][(int)y];
+		ret[1] = GameStatistics.map[(int)(x+xDim)][(int)y];
+		ret[2] = GameStatistics.map[(int)(x+xDim)][(int)(y+yDim)];
+		ret[3] = GameStatistics.map[(int)x][(int)(y+yDim)];
+		
+		for(int i=0;i<ret.length;i++)
+			if(!Tile.tiles[ret[i]].getWalkable())
+				return true;
+		
+		return false;
 	}
 	
 	private Vector2 getBulletSpawnPosLocal(Vector2 bulletDim)
@@ -224,17 +245,25 @@ public class ComponentPlayer extends Component {
 	
 	public void hit(Vector2 normal, float velocity, int damage)
 	{
-		hitbackVelocity.x = normal.x*30;
-		hitbackVelocity.y = normal.y*30;
+		if(System.currentTimeMillis()-lastHitTime < 500)
+			return;
 		if(damage != 0)
+		{
+			hitbackVelocity.x = normal.x*30;
+			hitbackVelocity.y = normal.y*30;
+		
 			lastHitTime = System.currentTimeMillis();
+		}
 		
 		GameStatistics.playerHealth -= ((double)damage)/maxHealth;
 		
 		if(GameStatistics.playerHealth <= 0)
 		{
 			Remote2D.guiList.pop();
-			Remote2D.guiList.push(new GuiDead());
+			if(GameStatistics.lives > 0)
+				Remote2D.guiList.push(new GuiRevive());
+			else
+				Remote2D.guiList.push(new GuiDead());
 		}
 	}
 	

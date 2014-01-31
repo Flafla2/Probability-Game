@@ -115,6 +115,11 @@ public class GuiMainMenu extends GuiMenu{
 			debug = !debug;
 			initGui();
 		}
+		
+		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_R))
+		{
+			Remote2D.guiList.push(new GuiRevive());
+		}
 	}
 	
 	@Override
