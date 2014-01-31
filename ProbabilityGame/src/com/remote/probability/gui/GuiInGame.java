@@ -95,9 +95,6 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 		if(AudioSwitcher.getSoundMode() != SoundMode.INGAME)
 			AudioSwitcher.setSoundMode(SoundMode.INGAME);
 		
-		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_F))
-			GameStatistics.finished = true;
-		
 		if(GameStatistics.finished)
 		{
 			if(Keyboard.isKeyDown(Keyboard.KEY_E))
@@ -109,9 +106,6 @@ public class GuiInGame extends com.remote.remote2d.engine.gui.GuiInGame {
 				Remote2D.guiList.push(new GuiRiskSelect(this));
 			}
 		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_H))
-			GameStatistics.playerHealth = 1;
 		
 		AudioSwitcher.tick();
 	}

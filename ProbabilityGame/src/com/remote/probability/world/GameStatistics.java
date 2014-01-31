@@ -36,7 +36,7 @@ public class GameStatistics {
 	{
 		double rf = riskFactor;
 		rf /= 100d;
-		return (1+0.2*wave)*(rf+1);
+		return (1+0.1*wave)*(rf+1);
 	}
 	
 	public static double getMoneyMultiplier()

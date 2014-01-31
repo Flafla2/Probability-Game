@@ -175,12 +175,6 @@ public class GuiRiskSelect extends GuiMenu {
 		super.tick(i, j, k);
 		slider.tick(i, j, k);
 		AudioSwitcher.tick();
-		
-		if(Remote2D.getIntegerKeyboardList().contains(Keyboard.KEY_M))
-		{
-			GameStatistics.playerMoney += 500;
-			calculateCurrentValues();
-		}
 	}
 	
 	public static double round(double value, int places) {

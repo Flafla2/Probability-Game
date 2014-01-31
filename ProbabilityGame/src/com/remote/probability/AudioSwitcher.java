@@ -8,6 +8,8 @@ public class AudioSwitcher {
 	static String currentSound = null;
 	static long soundResetTime = -1;
 	
+	public static float musicVol = 1;
+	
 	public static String title = "res/sound/music/ThemeTitle.ogg";
 	public static String end = "res/sound/music/ThemeEnd.ogg";
 	public static String[] background = {"res/sound/music/Background 1.ogg","res/sound/music/Background 2.ogg","res/sound/music/Background 3.ogg","res/sound/music/Background 4.ogg"};
@@ -43,6 +45,13 @@ public class AudioSwitcher {
 		for(String s : preloadSounds) AudioHandler.preloadSound(s);
 	}
 	
+	public static void setMusicVol(float vol)
+	{
+		if(currentSound == null) return;
+		AudioHandler.setVolume(currentSound, vol);
+		musicVol = vol;
+	}
+	
 	public static void setSoundMode(SoundMode mode)
 	{
 		if(AudioHandler.soundSystem == null || AudioHandler.isShutDown())
@@ -66,6 +75,8 @@ public class AudioSwitcher {
 			setRandomBGMusic();
 			break;
 		}
+		
+		if(currentSound != null) AudioHandler.setVolume(currentSound, musicVol);
 	}
 	
 	public static void tick()
